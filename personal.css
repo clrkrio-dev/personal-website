@@ -1070,10 +1070,12 @@ header.nav {
 .skill-group.back .tag {
   border-color: color-mix(in srgb, var(--warm) 45%, var(--line));
 }
+.skill-group.database .tag {
+  border-color: color-mix(in srgb, var(--red) 45%, var(--line));
+}
 .skill-group.ml .tag {
   border-color: color-mix(in srgb, var(--sage) 45%, var(--line));
 }
-
 .skill-group.tools .tag {
   border-color: color-mix(in srgb, var(--warm) 45%, var(--line));
 }
