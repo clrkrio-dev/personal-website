@@ -1079,7 +1079,7 @@ header.nav {
 }
 
 .skill-group.practice .tag {
-  border-color: color-mix(in srgb, var(--red) 45%, var(--line));
+  border-color: color-mix(in srgb, var(--signal) 40%, var(--line));
 }
 
 /* =========================================================
