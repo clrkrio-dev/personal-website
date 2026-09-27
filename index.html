@@ -1,37 +1,45 @@
+```html
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>John Clarke Ballega | Personal Website</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon-16x16.png" type="image/x-icon" />
-    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon" />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon-16x16.png" type="image/png" />
+    <link rel="icon" href="favicon-32x32.png" type="image/png" />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css"
     />
-    <link
-      rel="apple-touch-icon"
-      href="apple-touch-icon.png"
-      type="image/x-icon"
-    />
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="personal.css" />
   </head>
+
   <body>
     <div class="bg-field"></div>
 
+    <!-- NAVIGATION -->
     <header class="nav">
       <div class="nav-inner">
-        <div class="nav-mark"><a href="#top">Clarke Dev</a></div>
+        <div class="nav-mark">
+          <a href="#top">Clarke Dev</a>
+        </div>
+
         <ul class="nav-links">
-          <li></li>
           <li><a href="#about">about</a></li>
           <li><a href="#skills">skills</a></li>
           <li><a href="#experience">experience</a></li>
@@ -40,8 +48,8 @@
           <li><a href="#contributions">contributions</a></li>
           <li><a href="#resume">resume</a></li>
           <li><a href="#contact">contact</a></li>
-          <li></li>
         </ul>
+
         <button
           class="theme-toggle"
           id="themeToggle"
@@ -55,11 +63,12 @@
             stroke-width="2"
             stroke-linecap="round"
           >
-            <circle cx="12" cy="12" r="4" />
+            <circle cx="12" cy="12" r="4"></circle>
             <path
               d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-            />
+            ></path>
           </svg>
+
           <svg
             class="icon-moon"
             viewBox="0 0 24 24"
@@ -69,12 +78,13 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           >
-            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
           </svg>
         </button>
       </div>
     </header>
 
+    <!-- MAIN SHELL -->
     <div class="shell">
       <div class="thread-col">
         <div class="thread-line"></div>
@@ -82,10 +92,12 @@
       </div>
 
       <div class="content-col">
+        <!-- HERO -->
         <section class="hero" id="top">
           <div>
             <h1 class="hero-name">
               JOHN CLARKE BALLEGA
+
               <svg
                 class="squiggle"
                 viewBox="0 0 190 14"
@@ -100,47 +112,64 @@
                 />
               </svg>
             </h1>
+
             <p class="hero-role">
-              aspiring machine learning engineer & full-stack developer
+              aspiring machine learning engineer &amp; full-stack developer
             </p>
+
             <p class="hero-bio">
-              I build things at the intersection of data and interface from
+              I build things at the intersection of data and interface, from
               training models to shipping the products that put them in front of
               people. Lately I'm most interested in making ML systems feel less
               like black boxes and more like tools people actually trust.
             </p>
+
             <div class="hero-cta">
               <a class="btn primary" href="#resume">View résumé</a>
-              <a class="btn" href="#" download>Download PDF ↓</a>
+
+              <!-- Replace resume.pdf with your actual PDF filename -->
+              <a class="btn" href="resume.pdf" download> Download PDF ↓ </a>
             </div>
           </div>
 
+          <!-- HERO GRAPHIC -->
           <svg
             class="hero-graphic"
             viewBox="0 0 280 260"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g class="edge"><path d="M40 40 L140 90" /></g>
-            <g class="edge"><path d="M40 130 L140 90" /></g>
-            <g class="edge"><path d="M40 220 L140 90" /></g>
-            <g class="edge"><path d="M40 40 L140 170" /></g>
-            <g class="edge"><path d="M40 130 L140 170" /></g>
-            <g class="edge"><path d="M40 220 L140 170" /></g>
-            <g class="edge"><path d="M140 90 L240 60" /></g>
-            <g class="edge"><path d="M140 90 L240 130" /></g>
-            <g class="edge"><path d="M140 170 L240 130" /></g>
-            <g class="edge"><path d="M140 170 L240 200" /></g>
-            <path class="edge" d="M40 40 L140 90" />
-            <path class="edge" d="M40 130 L140 90" />
-            <path class="edge" d="M40 220 L140 90" />
-            <path class="edge" d="M40 40 L140 170" />
-            <path class="edge" d="M40 130 L140 170" />
-            <path class="edge" d="M40 220 L140 170" />
-            <path class="edge" d="M140 90 L240 60" />
-            <path class="edge" d="M140 90 L240 130" />
-            <path class="edge" d="M140 170 L240 130" />
-            <path class="edge" d="M140 170 L240 200" />
+            <g class="edge">
+              <path d="M40 40 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 130 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 220 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 40 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 130 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 220 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 90 L240 60"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 90 L240 130"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 170 L240 130"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 170 L240 200"></path>
+            </g>
+
             <circle
               class="node"
               cx="40"
@@ -200,28 +229,33 @@
           </svg>
         </section>
 
+        <!-- ABOUT -->
         <section id="about">
           <p class="eyebrow">about</p>
+
           <div class="about-grid">
             <div class="avatar">
               <div class="avatar-inner">
-                <img src="image.png" alt="avatar" />
+                <img src="image.png" alt="John Clarke Ballega" />
               </div>
             </div>
+
             <div class="about-text">
               <p>
                 Based in the Philippines, currently finishing a degree in
                 Information Technology while working on machine learning
-                projects that pair cleanly with real interfaces not just
+                projects that pair cleanly with real interfaces, not just
                 notebooks. I like the parts of engineering that sit between
                 disciplines: the model that needs a dashboard, the schema that
                 needs a story.
               </p>
+
               <p>
                 Outside of code: sketchbooks, long walks with bad instant
                 coffee, and an ongoing argument with myself about whether
                 semicolons matter.
               </p>
+
               <p class="note">— still debugging, still curious.</p>
             </div>
           </div>
@@ -229,12 +263,15 @@
 
         <section id="interests">
           <p class="eyebrow">off the clock</p>
+
           <div class="interest-grid">
             <div class="interest-card">
               <div class="interest-icon">
                 <i class="fa-solid fa-pen-nib"></i>
               </div>
+
               <p class="interest-title">Sketchbooks</p>
+
               <p class="interest-desc">
                 A pocket notebook for loose ideas, UI doodles, and things that
                 don't need to compile.
@@ -245,17 +282,22 @@
               <div class="interest-icon">
                 <i class="fa-solid fa-book"></i>
               </div>
+
               <p class="interest-title">Sci-fi &amp; speculative fiction</p>
+
               <p class="interest-desc">
                 Anything that treats a "what if" like an engineering problem
                 worth solving.
               </p>
             </div>
+
             <div class="interest-card">
               <div class="interest-icon">
                 <i class="fa-solid fa-chess"></i>
               </div>
+
               <p class="interest-title">Chess</p>
+
               <p class="interest-desc">
                 Slow games, worse openings, the occasional puzzle rush at 1am.
               </p>
@@ -265,72 +307,74 @@
 
         <section id="skills">
           <p class="eyebrow">skills</p>
-          <div class="skill-group langs">
-            <p class="skill-label">languages</p>
+          <div class="skill-group cores">
+            <p class="skill-label">core</p>
             <div class="skill-tags">
               <span class="tag">HTML / CSS</span>
-              <span class="tag">React</span>
               <span class="tag">JavaScript</span>
               <span class="tag">Python</span>
               <span class="tag">Java</span>
               <span class="tag">SQL</span>
-              <span class="tag">PHP</span>
+            </div>
+          </div>
+          <div class="skill-group front">
+            <p class="skill-label">frontend</p>
+            <div class="skill-tags">
+              <span class="tag">React</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+          <div class="skill-group back">
+            <p class="skill-label">backend</p>
+            <div class="skill-tags">
+              <span class="tag">FastAPI</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">Laravel</span>
             </div>
           </div>
           <div class="skill-group ml">
-            <p class="skill-label">ml & data</p>
+            <p class="skill-label">machine learning</p>
             <div class="skill-tags">
               <span class="tag">scikit-learn</span>
               <span class="tag">Pandas</span>
               <span class="tag">NumPy</span>
-              <span class="tag">Pytorch</span>
+              <span class="tag">PyTorch</span>
             </div>
           </div>
           <div class="skill-group tools">
-            <p class="skill-label">tools & platforms</p>
+            <p class="skill-label">tools</p>
             <div class="skill-tags">
               <span class="tag">Git</span>
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">Excel</span>
               <span class="tag">Figma</span>
-              <span class="tag">Canva</span>
-              <span class="tag">Cisco</span>
-              <span class="tag">SQLite</span>
+              <span class="tag">Cisco Packet Tracer</span>
               <span class="tag">Maven</span>
-              <span class="tag">XAMPP</span>
-              <span class="tag">FastAPI</span>
-              <span class="tag">Pydantic</span>
-              <span class="tag">Vite</span>
             </div>
           </div>
-          <div class="skill-group frameworks">
-            <p class="skill-label">frameworks</p>
-            <div class="skill-tags">
-              <span class="tag">Spring Boot</span>
-              <span class="tag">Django</span>
-              <span class="tag">Laravel</span>
-              <span class="tag">Node JS</span>
-            </div>
-          </div>
+
           <div class="skill-group practice">
             <p class="skill-label">ways of working</p>
             <div class="skill-tags">
-            <span class="tag">AI-Assisted Development</span>
-            <span class="tag">Agile / Scrum</span>
-            <span class="tag">Version Control</span>
+              <span class="tag">AI-Assisted Development</span>
+              <span class="tag">Agile / Scrum</span>
+              <span class="tag">Version Control</span>
+            </div>
           </div>
         </section>
 
         <section id="experience">
-          <p class="eyebrow">experience & education</p>
+          <p class="eyebrow">experience &amp; education</p>
+
           <div class="tl">
             <div class="tl-item">
               <p class="tl-date">2022 — present</p>
+
               <p class="tl-title">B.S. Information Technology</p>
+
               <p class="tl-org">FullBright College</p>
+
               <p class="tl-desc">
                 Coursework in networking, databases, and software engineering,
-                with independent self study in applied machine learning.
+                with independent self-study in applied machine learning.
               </p>
             </div>
           </div>
@@ -347,6 +391,7 @@
             >
               ‹
             </button>
+
             <button
               class="cert-arrow next"
               id="certNext"
@@ -354,30 +399,37 @@
             >
               ›
             </button>
+
             <div class="cert-track-wrap" id="certWrap">
               <div class="cert-track" id="certTrack">
                 <div class="cert-slide">
                   <div class="cert-bar">
                     <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT LOGO" />
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
                     </div>
-                    <span class="cert-bar-name">DICT Certification</span>
+
+                    <span class="cert-bar-name"> DICT Certification </span>
                   </div>
+
                   <p class="cert-title">
                     From Circuit Boards to Cyber Threats: Awareness that Matters
                   </p>
+
                   <p class="cert-holder">
                     Presented to <b>John Clarke Ballega</b>
                   </p>
-                  <p class="cert-meta">Held on June 2 2025</p>
+
+                  <p class="cert-meta">Held on June 2, 2025</p>
+
                   <span class="cert-status">valid</span>
                 </div>
+
                 <div class="cert-slide">
                   <div class="cert-bar">
                     <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT LOGO" />
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
                     </div>
-                    <span class="cert-bar-name">DICT Certification</span>
+                    <span class="cert-bar-name"> DICT Certification </span>
                   </div>
                   <p class="cert-title">
                     Philippine National Public Key Infrastructure (PNPKI)
@@ -386,24 +438,29 @@
                   <p class="cert-holder">
                     Presented to <b>John Clarke Ballega</b>
                   </p>
-                  <p class="cert-meta">Held on June 2 2025</p>
+                  <p class="cert-meta">Held on June 2, 2025</p>
                   <span class="cert-status">valid</span>
                 </div>
                 <div class="cert-slide">
                   <div class="cert-bar">
                     <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT LOGO" />
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
                     </div>
-                    <span class="cert-bar-name">DICT Certification</span>
+
+                    <span class="cert-bar-name"> DICT Certification </span>
                   </div>
+
                   <p class="cert-title">
                     Digital Love for Every Juan: eGov PH Super App Orientation
                     for Fullbright College ECT Department
                   </p>
+
                   <p class="cert-holder">
                     Presented to <b>John Clarke Ballega</b>
                   </p>
-                  <p class="cert-meta">Held on February 14 2026</p>
+
+                  <p class="cert-meta">Held on February 14, 2026</p>
+
                   <span class="cert-status">valid</span>
                 </div>
               </div>
@@ -417,98 +474,134 @@
 
         <section id="projects">
           <p class="eyebrow">projects</p>
+
           <div class="proj-grid">
             <div class="proj-card">
-              <p class="proj-title">Large Languages Models (LLM) Chat bot</p>
+              <p class="proj-title">LLM Chatbot</p>
+
               <p class="proj-desc">
-                This is the simple LLM with a simple Models that can answers
-                simple questions and operations with a good interactive
-                background & UI.
+                A lightweight conversational AI system built with React and
+                FastAPI, with a Python/PyTorch ML layer. The project explores
+                model inference, API communication, streaming responses, and an
+                interactive developer-focused interface.
               </p>
+
               <div class="proj-stack">
-                <span>React</span><span>JavaScript</span><span>HTML</span
-                ><span>CSS</span><span>Python</span><span>Pytorch</span
-                ><span>FastAPI</span><span>Vite</span><span>Pydantic</span>
+                <span>React</span>
+                <span>Python</span>
+                <span>PyTorch</span>
+                <span>FastAPI</span>
               </div>
             </div>
+
             <div class="proj-card">
-              <p class="proj-title">Attendance & Scheduling System</p>
+              <p class="proj-title">Attendance &amp; Scheduling System</p>
+
               <p class="proj-desc">
-                A school projects about Attendance & Scheduling System for
-                School Management System with attendance, teacher schedule,
-                student schedule, rooms, and conflict detection tabs.
+                A school project for an Attendance &amp; Scheduling System with
+                attendance, teacher schedules, student schedules, rooms, and
+                conflict detection.
               </p>
+
               <div class="proj-stack">
-                <span>HTML/CSS</span><span>JavaScript</span><span>PHP</span
-                ><span>Laravel</span>
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
+                <span>PHP</span>
+                <span>Laravel</span>
               </div>
             </div>
+
             <div class="proj-card">
               <p class="proj-title">
-                Self Learning Material in Python & Machine Learning
+                Self-Learning Material in Python &amp; Machine Learning
               </p>
+
               <p class="proj-desc">
-                I make my learning material about my career in machine learning
-                to improve my skill while finishing my degree college, and this
-                have a learning phase to not struggle for my learning sessions.
+                A personal learning resource covering Python and machine
+                learning concepts to support my studies and build a structured
+                learning path.
               </p>
+
               <div class="proj-stack">
-                <span>HTML/CSS</span><span>JavaScript</span>
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
               </div>
             </div>
+
             <div class="proj-card">
               <p class="proj-title">Boarding House Management System</p>
+
               <p class="proj-desc">
-                A Boarding House System with three roles such as admin,
-                landlord, and tenant with a booking, payment, maintenance
-                request, announcement, room tabs and log out system.
+                A Boarding House Management System with admin, landlord, and
+                tenant roles, including booking, payment, maintenance requests,
+                announcements, rooms, and logout functionality.
               </p>
+
               <div class="proj-stack">
-                <span>HTML/CSS</span><span>JavaScript</span><span>SQL</span
-                ><span>Java</span><span>Spring Boot</span>
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
+                <span>SQL</span>
+                <span>Java</span>
+                <span>Spring Boot</span>
               </div>
             </div>
+
             <div class="proj-card">
               <p class="proj-title">Paint App Website</p>
+
               <p class="proj-desc">
-                A simple paint app with multi color, different drawing button,
-                three shape button, undo, delete, and save button, with
-                adjustable size.
+                A simple paint application with multiple colors, drawing tools,
+                shapes, undo, delete, save, and adjustable brush size.
               </p>
+
               <div class="proj-stack">
-                <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
               </div>
             </div>
+
             <div class="proj-card">
               <p class="proj-title">Calculator</p>
+
               <p class="proj-desc">
-                A simple calculator with simple ui design.
+                A simple calculator with a clean user interface.
               </p>
+
               <div class="proj-stack">
-                <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
               </div>
             </div>
+
             <div class="proj-card">
               <p class="proj-title">Student Registration Form</p>
+
               <p class="proj-desc">
-                A simple student registration form with submit, update, and
-                delete function with simple log in page.
+                A student registration application with submit, update, delete,
+                and login functionality.
               </p>
+
               <div class="proj-stack">
-                <span>Tkinter</span><span>Python</span
-                ><span>Excel Database</span>
+                <span>Tkinter</span>
+                <span>Python</span>
+                <span>Excel Database</span>
               </div>
             </div>
           </div>
         </section>
 
+        <!-- CONTRIBUTIONS -->
         <section id="contributions">
           <p class="eyebrow">contributions</p>
+
           <div class="terminal">
             <div class="terminal-bar">
               <span>github.com/clrkrio-dev</span>
               <span>last 12 months</span>
             </div>
+
             <div class="terminal-body gh-body">
               <img
                 class="gh-chart gh-dark"
@@ -520,80 +613,109 @@
               />
             </div>
           </div>
+
           <div class="resume-actions">
             <a
               class="btn"
               href="https://github.com/clrkrio-dev"
               target="_blank"
-              rel="noopener"
-              >View GitHub profile ↗</a
+              rel="noopener noreferrer"
             >
+              View GitHub profile ↗
+            </a>
+
             <p class="resume-note">dark squares, occasional chaos.</p>
           </div>
         </section>
 
+        <!-- RESUME -->
         <section id="resume">
           <p class="eyebrow">résumé</p>
+
           <div class="terminal">
             <div class="terminal-bar">
               <span>john clarke ballega — resume.pdf</span>
               <span>1 page</span>
             </div>
+
             <div class="terminal-body">
               <div>
-                <span class="k">name</span>&nbsp;&nbsp;&nbsp;&nbsp;<span
-                  class="v"
-                  >John Clarke Ballega</span
-                >
+                <span class="k">name</span>
+                <span class="v">John Clarke Ballega</span>
               </div>
+
               <div>
-                <span class="k">role</span>&nbsp;&nbsp;&nbsp;&nbsp;<span
-                  class="v"
-                  >Machine Learning Engineer / Full-Stack Developer</span
-                >
+                <span class="k">role</span>
+                <span class="v">
+                  Machine Learning Engineer / Full-Stack Developer
+                </span>
               </div>
+
               <div>
-                <span class="k">based</span>&nbsp;&nbsp;&nbsp;<span class="v"
-                  >Philippines</span
-                >
+                <span class="k">based</span>
+                <span class="v">Philippines</span>
               </div>
+
               <div>
-                <span class="k">focus</span>&nbsp;&nbsp;&nbsp;<span class="v"
-                  >applied ML, data-driven interfaces, backend systems, frontend
-                  design</span
-                >
+                <span class="k">focus</span>
+                <span class="v">
+                  applied ML, data-driven interfaces, backend systems, frontend
+                  design
+                </span>
               </div>
+
               <div>
-                <span class="k">status</span>&nbsp;&nbsp;<span class="v"
-                  >open to internships & junior roles</span
-                >
+                <span class="k">status</span>
+                <span class="v"> open to internships &amp; junior roles </span>
               </div>
             </div>
           </div>
+
           <div class="resume-actions">
-            <a class="btn primary" href="#resume" download
-              >Download résumé (PDF) ↓</a
-            >
+            <!-- Replace resume.pdf with your actual PDF filename -->
+            <a class="btn primary" href="resume.pdf" download>
+              Download résumé (PDF) ↓
+            </a>
+
             <p class="resume-note">the honest version, no buzzwords added.</p>
           </div>
         </section>
       </div>
     </div>
 
+    <!-- FOOTER / CONTACT -->
     <footer id="contact">
       <div class="footer-inner">
         <p class="eyebrow">contact</p>
+
         <h2 style="font-size: 28px">Say hello, or send a bug report.</h2>
+
         <div class="footer-links">
-          <a href="mailto:johnclarkeballega261@gmail.com"
-            >johnclarkeballega261@email.com</a
+          <a href="mailto:johnclarkeballega261@gmail.com">
+            johnclarkeballega261@gmail.com
+          </a>
+
+          <a
+            href="https://github.com/clrkrio-dev"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-          <a href="https://github.com/clrkrio-dev">github.com/clrkrio-dev</a>
-          <a href="https://www.stackinfolio.dev/clrk">stackinfolio.dev/clrk</a>
+            github.com/clrkrio-dev
+          </a>
+
+          <a
+            href="https://www.stackinfolio.dev/clrk"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            stackinfolio.dev/clrk
+          </a>
         </div>
+
         <p class="signoff">Thanks for reading this far — go build something.</p>
       </div>
     </footer>
+
     <script src="personal.js"></script>
   </body>
 </html>
