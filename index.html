@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>John Clarke Ballega | Personal Website</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon-16x16.png" type="image/png" />
+    <link rel="icon" href="favicon-32x32.png" type="image/png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css"
+    />
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="personal.css" />
+  </head>
+
+  <body>
+    <div class="bg-field"></div>
+
+    <!-- NAVIGATION -->
+    <header class="nav">
+      <div class="nav-inner">
+        <div class="nav-mark">
+          <a href="#top">Clarke Dev</a>
+        </div>
+
+        <ul class="nav-links">
+          <li><a href="#about">about</a></li>
+          <li><a href="#skills">skills</a></li>
+          <li><a href="#experience">experience</a></li>
+          <li><a href="#certifications">certifications</a></li>
+          <li><a href="#projects">projects</a></li>
+          <li><a href="#contributions">contributions</a></li>
+          <li><a href="#resume">resume</a></li>
+          <li><a href="#contact">contact</a></li>
+        </ul>
+
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          aria-label="Toggle dark mode"
+        >
+          <svg
+            class="icon-sun"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path
+              d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+            ></path>
+          </svg>
+
+          <svg
+            class="icon-moon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN SHELL -->
+    <div class="shell">
+      <div class="thread-col">
+        <div class="thread-line"></div>
+        <div class="thread-node"></div>
+      </div>
+
+      <div class="content-col">
+        <!-- HERO -->
+        <section class="hero" id="top">
+          <div>
+            <h1 class="hero-name">
+              JOHN CLARKE BALLEGA
+
+              <svg
+                class="squiggle"
+                viewBox="0 0 190 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 9C20 2 32 2 46 9C60 16 72 16 86 9C100 2 112 2 126 9C140 16 152 16 166 9C172 6.5 176 6 188 8"
+                  stroke="#d68c2e"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </h1>
+
+            <p class="hero-role">
+              aspiring machine learning engineer &amp; full-stack developer
+            </p>
+
+            <p class="hero-bio">
+              I build things at the intersection of data and interface, from
+              training models to shipping the products that put them in front of
+              people. Lately I'm most interested in making ML systems feel less
+              like black boxes and more like tools people actually trust.
+            </p>
+
+            <div class="hero-cta">
+              <a class="btn primary" href="#resume">View résumé</a>
+
+              <!-- Replace resume.pdf with your actual PDF filename -->
+              <a class="btn" href="resume.pdf" download> Download PDF ↓ </a>
+            </div>
+          </div>
+
+          <!-- HERO GRAPHIC -->
+          <svg
+            class="hero-graphic"
+            viewBox="0 0 280 260"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g class="edge">
+              <path d="M40 40 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 130 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 220 L140 90"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 40 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 130 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M40 220 L140 170"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 90 L240 60"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 90 L240 130"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 170 L240 130"></path>
+            </g>
+            <g class="edge">
+              <path d="M140 170 L240 200"></path>
+            </g>
+
+            <circle
+              class="node"
+              cx="40"
+              cy="40"
+              r="6"
+              style="animation-delay: 0.1s"
+            />
+            <circle
+              class="node"
+              cx="40"
+              cy="130"
+              r="6"
+              style="animation-delay: 0.2s"
+            />
+            <circle
+              class="node"
+              cx="40"
+              cy="220"
+              r="6"
+              style="animation-delay: 0.3s"
+            />
+            <circle
+              class="node"
+              cx="140"
+              cy="90"
+              r="6"
+              style="animation-delay: 0.4s"
+            />
+            <circle
+              class="node warm"
+              cx="140"
+              cy="170"
+              r="6"
+              style="animation-delay: 0.5s"
+            />
+            <circle
+              class="node"
+              cx="240"
+              cy="60"
+              r="6"
+              style="animation-delay: 0.6s"
+            />
+            <circle
+              class="node"
+              cx="240"
+              cy="130"
+              r="6"
+              style="animation-delay: 0.7s"
+            />
+            <circle
+              class="node"
+              cx="240"
+              cy="200"
+              r="6"
+              style="animation-delay: 0.8s"
+            />
+          </svg>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+          <p class="eyebrow">about</p>
+
+          <div class="about-grid">
+            <div class="avatar">
+              <div class="avatar-inner">
+                <img src="image.png" alt="John Clarke Ballega" />
+              </div>
+            </div>
+
+            <div class="about-text">
+              <p>
+                Based in the Philippines, currently finishing a degree in
+                Information Technology while working on machine learning
+                projects that pair cleanly with real interfaces, not just
+                notebooks. I like the parts of engineering that sit between
+                disciplines: the model that needs a dashboard, the schema that
+                needs a story.
+              </p>
+
+              <p>
+                Outside of code: sketchbooks, long walks with bad instant
+                coffee, and an ongoing argument with myself about whether
+                semicolons matter.
+              </p>
+
+              <p class="note">— still debugging, still curious.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="interests">
+          <p class="eyebrow">off the clock</p>
+
+          <div class="interest-grid">
+            <div class="interest-card">
+              <div class="interest-icon">
+                <i class="fa-solid fa-pen-nib"></i>
+              </div>
+
+              <p class="interest-title">Sketchbooks</p>
+
+              <p class="interest-desc">
+                A pocket notebook for loose ideas, UI doodles, and things that
+                don't need to compile.
+              </p>
+            </div>
+
+            <div class="interest-card">
+              <div class="interest-icon">
+                <i class="fa-solid fa-book"></i>
+              </div>
+
+              <p class="interest-title">Sci-fi &amp; speculative fiction</p>
+
+              <p class="interest-desc">
+                Anything that treats a "what if" like an engineering problem
+                worth solving.
+              </p>
+            </div>
+
+            <div class="interest-card">
+              <div class="interest-icon">
+                <i class="fa-solid fa-chess"></i>
+              </div>
+
+              <p class="interest-title">Chess</p>
+
+              <p class="interest-desc">
+                Slow games, worse openings, the occasional puzzle rush at 1am.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="skills">
+          <p class="eyebrow">skills</p>
+          <div class="skill-group cores">
+            <p class="skill-label">core</p>
+            <div class="skill-tags">
+              <span class="tag">HTML / CSS</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">Python</span>
+              <span class="tag">Java</span>
+              <span class="tag">SQL</span>
+            </div>
+          </div>
+          <div class="skill-group front">
+            <p class="skill-label">frontend</p>
+            <div class="skill-tags">
+              <span class="tag">React</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+          <div class="skill-group back">
+            <p class="skill-label">backend</p>
+            <div class="skill-tags">
+              <span class="tag">FastAPI</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">Laravel</span>
+            </div>
+          </div>
+          <div class="skill-group database">
+            <p class="skill-label">databases</p>
+            <div class="skill-tags">
+              <span class="tag">MYSQL</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">SQlite</span>
+            </div>
+            <div class="skill-group ml">
+              <p class="skill-label">machine learning</p>
+              <div class="skill-tags">
+                <span class="tag">scikit-learn</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">NumPy</span>
+                <span class="tag">PyTorch</span>
+              </div>
+            </div>
+          </div>
+          <div class="skill-group tools">
+            <p class="skill-label">tools</p>
+            <div class="skill-tags">
+              <span class="tag">Git</span>
+              <span class="tag">Figma</span>
+              <span class="tag">Cisco Packet Tracer</span>
+              <span class="tag">Maven</span>
+            </div>
+          </div>
+          <div class="skill-group practice">
+            <p class="skill-label">ways of working</p>
+            <div class="skill-tags">
+              <span class="tag">AI-Assisted Development</span>
+              <span class="tag">Agile / Scrum</span>
+              <span class="tag">Version Control</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="experience">
+          <p class="eyebrow">experience &amp; education</p>
+
+          <div class="tl">
+            <div class="tl-item">
+              <p class="tl-date">2022 — present</p>
+
+              <p class="tl-title">B.S. Information Technology</p>
+
+              <p class="tl-org">FullBright College</p>
+
+              <p class="tl-desc">
+                Coursework in networking, databases, and software engineering,
+                with independent self-study in applied machine learning.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="certifications">
+          <p class="eyebrow">certifications</p>
+
+          <div class="cert-carousel">
+            <button
+              class="cert-arrow prev"
+              id="certPrev"
+              aria-label="Previous certificate"
+            >
+              ‹
+            </button>
+
+            <button
+              class="cert-arrow next"
+              id="certNext"
+              aria-label="Next certificate"
+            >
+              ›
+            </button>
+
+            <div class="cert-track-wrap" id="certWrap">
+              <div class="cert-track" id="certTrack">
+                <div class="cert-slide">
+                  <div class="cert-bar">
+                    <div class="cert-seal">
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
+                    </div>
+
+                    <span class="cert-bar-name"> DICT Certification </span>
+                  </div>
+
+                  <p class="cert-title">
+                    From Circuit Boards to Cyber Threats: Awareness that Matters
+                  </p>
+
+                  <p class="cert-holder">
+                    Presented to <b>John Clarke Ballega</b>
+                  </p>
+
+                  <p class="cert-meta">Held on June 2, 2025</p>
+
+                  <span class="cert-status">valid</span>
+                </div>
+
+                <div class="cert-slide">
+                  <div class="cert-bar">
+                    <div class="cert-seal">
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
+                    </div>
+                    <span class="cert-bar-name"> DICT Certification </span>
+                  </div>
+                  <p class="cert-title">
+                    Philippine National Public Key Infrastructure (PNPKI)
+                    Orientation
+                  </p>
+                  <p class="cert-holder">
+                    Presented to <b>John Clarke Ballega</b>
+                  </p>
+                  <p class="cert-meta">Held on June 2, 2025</p>
+                  <span class="cert-status">valid</span>
+                </div>
+                <div class="cert-slide">
+                  <div class="cert-bar">
+                    <div class="cert-seal">
+                      <img src="DICTLOGO.png" alt="DICT Logo" />
+                    </div>
+
+                    <span class="cert-bar-name"> DICT Certification </span>
+                  </div>
+
+                  <p class="cert-title">
+                    Digital Love for Every Juan: eGov PH Super App Orientation
+                    for Fullbright College ECT Department
+                  </p>
+
+                  <p class="cert-holder">
+                    Presented to <b>John Clarke Ballega</b>
+                  </p>
+
+                  <p class="cert-meta">Held on February 14, 2026</p>
+
+                  <span class="cert-status">valid</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-controls">
+              <div class="cert-dots" id="certDots"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="projects">
+          <p class="eyebrow">projects</p>
+
+          <div class="proj-grid">
+            <div class="proj-card">
+              <p class="proj-title">AI Contactless Multimedia Control</p>
+
+              <p class="proj-desc">
+                an AI-powered system that allows users to control multimedia
+                content using hand gestures captured through a camera. It uses
+                computer vision and gesture recognition to detect hand movements
+                and translate them into commands, such as opening, playing,
+                pausing, or switching photos and videos. The system combines a
+                React frontend with a Python backend, providing an interactive,
+                touch-free, and user-friendly multimedia experience.
+              </p>
+
+              <div class="proj-stack">
+                <span>React</span>
+                <span>Python</span>
+                <span>PyTorch</span>
+                <span>FastAPI</span>
+                <span>Joblib</span>
+                <span>Pandas</span>
+                <span>Numpy</span>
+                <span>scikit-learn</span>
+                <span>YOLO</span>
+                <span>MediaPipe</span>
+                <span>Uvicorn</span>
+                <span>Pydantic</span>
+                <span>OpenCV</span>
+              </div>
+            </div>
+            <div class="proj-card">
+              <p class="proj-title">LLM Chatbot</p>
+
+              <p class="proj-desc">
+                A lightweight conversational AI system built with React and
+                FastAPI, with a Python/PyTorch ML layer. The project explores
+                model inference, API communication, streaming responses, and an
+                interactive developer-focused interface.
+              </p>
+
+              <div class="proj-stack">
+                <span>React</span>
+                <span>Python</span>
+                <span>PyTorch</span>
+                <span>FastAPI</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">Attendance &amp; Scheduling System</p>
+
+              <p class="proj-desc">
+                A school project for an Attendance &amp; Scheduling System with
+                attendance, teacher schedules, student schedules, rooms, and
+                conflict detection.
+              </p>
+
+              <div class="proj-stack">
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
+                <span>PHP</span>
+                <span>Laravel</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">
+                Self-Learning Material in Python &amp; Machine Learning
+              </p>
+
+              <p class="proj-desc">
+                A personal learning resource covering Python and machine
+                learning concepts to support my studies and build a structured
+                learning path.
+              </p>
+
+              <div class="proj-stack">
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">Boarding House Management System</p>
+
+              <p class="proj-desc">
+                A Boarding House Management System with admin, landlord, and
+                tenant roles, including booking, payment, maintenance requests,
+                announcements, rooms, and logout functionality.
+              </p>
+
+              <div class="proj-stack">
+                <span>HTML/CSS</span>
+                <span>JavaScript</span>
+                <span>SQL</span>
+                <span>Java</span>
+                <span>Spring Boot</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">Paint App Website</p>
+
+              <p class="proj-desc">
+                A simple paint application with multiple colors, drawing tools,
+                shapes, undo, delete, save, and adjustable brush size.
+              </p>
+
+              <div class="proj-stack">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">Calculator</p>
+
+              <p class="proj-desc">
+                A simple calculator with a clean user interface.
+              </p>
+
+              <div class="proj-stack">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+              </div>
+            </div>
+
+            <div class="proj-card">
+              <p class="proj-title">Student Registration Form</p>
+
+              <p class="proj-desc">
+                A student registration application with submit, update, delete,
+                and login functionality.
+              </p>
+
+              <div class="proj-stack">
+                <span>Tkinter</span>
+                <span>Python</span>
+                <span>Excel Database</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="reviews">
+          <div class="reviews-head">
+            <p class="eyebrow">reviews</p>
+
+            <h2 class="reviews-title">What people say</h2>
+
+            <p class="reviews-sub">
+              A few words from the people I've built with — mentors, teammates,
+              and clients who saw the work up close.
+            </p>
+          </div>
+
+          <div class="review-panel">
+            <div
+              class="review-tabs"
+              role="group"
+              aria-label="Filter reviews by source"
+            >
+              <button
+                type="button"
+                class="review-tab active"
+                data-filter="all"
+                aria-pressed="true"
+              >
+                <span>All reviews</span>
+                <span class="tab-score">-</span>
+              </button>
+
+              <button
+                type="button"
+                class="review-tab tab-google"
+                data-filter="google"
+                aria-pressed="false"
+              >
+                <i class="fa-brands fa-facebook" aria-hidden="true"></i>
+                <span>Facebook</span>
+                <span class="tab-score">-</span>
+              </button>
+
+              <button
+                type="button"
+                class="review-tab tab-linkedin"
+                data-filter="linkedin"
+                aria-pressed="false"
+              >
+                <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+                <span>LinkedIn</span>
+                <span class="tab-score">-</span>
+              </button>
+
+              <button
+                type="button"
+                class="review-tab tab-github"
+                data-filter="github"
+                aria-pressed="false"
+              >
+                <i class="fa-brands fa-github" aria-hidden="true"></i>
+                <span>GitHub</span>
+                <span class="tab-score">-</span>
+              </button>
+
+              <button
+                type="button"
+                class="review-tab tab-upwork"
+                data-filter="upwork"
+                aria-pressed="false"
+              >
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                <span>Instagram</span>
+                <span class="tab-score">-</span>
+              </button>
+            </div>
+
+            <div class="review-summary">
+              <div>
+                <p class="review-summary-label">Overall rating</p>
+
+                <div class="review-score-row">
+                  <span class="review-score" id="reviewScore">-</span>
+
+                  <span
+                    class="rating-stars"
+                    id="reviewStars"
+                    style="--rating: 0"
+                    role="img"
+                    aria-label="No rating yet"
+                  >
+                    ★★★★★
+                  </span>
+
+                  <span class="review-count" id="reviewCount">
+                    (0 reviews)
+                  </span>
+                </div>
+              </div>
+
+              <a
+                class="btn primary review-write"
+                href="mailto:johnclarkeballega261@gmail.com?subject=Review%20for%20Clarke%20Dev"
+              >
+                Write a review
+              </a>
+            </div>
+          </div>
+
+          <p class="sr-only" id="reviewStatus" aria-live="polite"></p>
+
+          <div class="review-carousel">
+            <button
+              class="review-arrow prev"
+              id="reviewPrev"
+              type="button"
+              aria-label="Previous reviews"
+            >
+              ‹
+            </button>
+
+            <button
+              class="review-arrow next"
+              id="reviewNext"
+              type="button"
+              aria-label="Next reviews"
+            >
+              ›
+            </button>
+
+            <div class="review-track-wrap" id="reviewWrap">
+              <div class="review-track" id="reviewTrack">
+                <div class="review-empty" id="reviewEmpty">
+                  <i class="fa-regular fa-comment-dots" aria-hidden="true"></i>
+                  <p>No reviews yet.</p>
+                  <span>Real reviews will appear here once they are available.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="review-controls">
+              <div
+                class="review-dots"
+                id="reviewDots"
+                aria-label="Review pages"
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTRIBUTIONS -->
+        <section id="contributions">
+          <p class="eyebrow">contributions</p>
+
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span>github.com/clrkrio-dev</span>
+              <span>last 12 months</span>
+            </div>
+
+            <div class="terminal-body gh-body">
+              <img
+                class="gh-chart gh-dark"
+                src="https://ghchart.rshah.org/7d97e0/clrkrio-dev"
+                alt="clrkrio-dev's GitHub contribution graph"
+                loading="lazy"
+                width="722"
+                height="112"
+              />
+            </div>
+          </div>
+
+          <div class="resume-actions">
+            <a
+              class="btn"
+              href="https://github.com/clrkrio-dev"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View GitHub profile ↗
+            </a>
+
+            <p class="resume-note">dark squares, occasional chaos.</p>
+          </div>
+        </section>
+
+        <!-- RESUME -->
+        <section id="resume">
+          <p class="eyebrow">résumé</p>
+
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span>john clarke ballega — resume.pdf</span>
+              <span>1 page</span>
+            </div>
+
+            <div class="terminal-body">
+              <div>
+                <span class="k">name</span>
+                <span class="v">John Clarke Ballega</span>
+              </div>
+
+              <div>
+                <span class="k">role</span>
+                <span class="v">
+                  Machine Learning Engineer / Full-Stack Developer
+                </span>
+              </div>
+
+              <div>
+                <span class="k">based</span>
+                <span class="v">Philippines</span>
+              </div>
+
+              <div>
+                <span class="k">focus</span>
+                <span class="v">
+                  applied ML, data-driven interfaces, backend systems, frontend
+                  design
+                </span>
+              </div>
+
+              <div>
+                <span class="k">status</span>
+                <span class="v"> open to internships &amp; junior roles </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="resume-actions">
+            <a class="btn primary" href="resume.pdf" download>
+              Download résumé (PDF) ↓
+            </a>
+
+            <p class="resume-note">the honest version, no buzzwords added.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer id="contact">
+      <div class="footer-inner">
+        <p class="eyebrow">contact</p>
+
+        <h2 style="font-size: 28px">Say hello, or send a bug report.</h2>
+
+        <div class="footer-links">
+          <a href="mailto:johnclarkeballega261@gmail.com">
+            johnclarkeballega261@gmail.com
+          </a>
+
+          <a
+            href="https://github.com/clrkrio-dev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            github.com/clrkrio-dev
+          </a>
+
+          <a
+            href="https://www.stackinfolio.dev/clrk"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            stackinfolio.dev/clrk
+          </a>
+        </div>
+
+        <p class="signoff">Thanks for reading this far — go build something.</p>
+      </div>
+    </footer>
+
+    <script src="personal.js"></script>
+  </body>
+</html>
