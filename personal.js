@@ -749,13 +749,459 @@
   });
 
   /* =====================================================
+     LIVE GITHUB PROJECTS
+     ===================================================== */
+
+  var projectGrid = document.getElementById("projectGrid");
+
+  var PROJECT_GITHUB_USER = "clrkrio-dev";
+
+  var PROJECT_CACHE_KEY = "clrkrio-projects-v1";
+
+  var PROJECT_CACHE_TTL = 60 * 60 * 1000;
+
+  var PROJECT_EXCLUDED = ["personal-website", "clrkrio-dev"];
+
+  function readProjectCache() {
+    try {
+      var stored = localStorage.getItem(PROJECT_CACHE_KEY);
+
+      if (!stored) {
+        return null;
+      }
+
+      var parsed = JSON.parse(stored);
+
+      if (
+        !parsed ||
+        !Array.isArray(parsed.projects) ||
+        typeof parsed.savedAt !== "number"
+      ) {
+        return null;
+      }
+
+      return parsed;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeProjectCache(projects) {
+    try {
+      localStorage.setItem(
+        PROJECT_CACHE_KEY,
+        JSON.stringify({
+          savedAt: Date.now(),
+          projects: projects,
+        }),
+      );
+    } catch (error) {
+      /* Storage can be unavailable in private mode */
+    }
+  }
+
+  function prettyProjectName(name) {
+    return name
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/\b\w/g, function (letter) {
+        return letter.toUpperCase();
+      });
+  }
+
+  function formatProjectDate(value) {
+    var date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+      return "";
+    }
+
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  function summarizeReadme(markdown) {
+    if (!markdown) {
+      return "";
+    }
+
+    var text = markdown
+      .replace(/^---[\s\S]*?---/, " ")
+      .replace(/<!--[\s\S]*?-->/g, " ")
+      .replace(/```[\s\S]*?```/g, " ")
+      .replace(/~~~[\s\S]*?~~~/g, " ")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/^#{1,6}\s.*$/gm, " ")
+      .replace(/^[=\-]{3,}\s*$/gm, " ")
+      .replace(/[`*_~]/g, "")
+      .replace(/&[a-z]+;/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!text) {
+      return "";
+    }
+
+    if (text.length <= 210) {
+      return text;
+    }
+
+    var shortened = text.slice(0, 210);
+
+    var lastSpace = shortened.lastIndexOf(" ");
+
+    if (lastSpace > 120) {
+      shortened = shortened.slice(0, lastSpace);
+    }
+
+    return shortened.replace(/[.,;:!?]+$/, "") + "…";
+  }
+
+  function fetchReadmeSummary(repoName) {
+    var url =
+      "https://api.github.com/repos/" +
+      PROJECT_GITHUB_USER +
+      "/" +
+      encodeURIComponent(repoName) +
+      "/readme";
+
+    return fetch(url, {
+      headers: {
+        Accept: "application/vnd.github.raw",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          return "";
+        }
+
+        return response.text().then(summarizeReadme);
+      })
+      .catch(function () {
+        return "";
+      });
+  }
+
+  function fallbackProjectDescription(language) {
+    if (language) {
+      return (
+        "Built with " +
+        language +
+        " and hosted on GitHub — open the repository to explore the code."
+      );
+    }
+
+    return "A live GitHub repository — open it to explore the code.";
+  }
+
+  function fetchLiveProjects() {
+    var url =
+      "https://api.github.com/users/" +
+      PROJECT_GITHUB_USER +
+      "/repos?per_page=100&sort=pushed";
+
+    return fetch(url, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("GitHub request failed: " + response.status);
+        }
+
+        return response.json();
+      })
+      .then(function (repos) {
+        if (!Array.isArray(repos)) {
+          throw new Error("GitHub returned an unexpected response.");
+        }
+
+        var selected = repos
+          .filter(function (repo) {
+            return (
+              repo &&
+              !repo.fork &&
+              !repo.archived &&
+              !repo.disabled &&
+              !repo.private &&
+              PROJECT_EXCLUDED.indexOf(repo.name) === -1
+            );
+          })
+          .sort(function (a, b) {
+            return (
+              new Date(b.pushed_at || b.updated_at) -
+              new Date(a.pushed_at || a.updated_at)
+            );
+          });
+
+        return Promise.all(
+          selected.map(function (repo) {
+            return fetchReadmeSummary(repo.name).then(function (summary) {
+              return {
+                name: repo.name,
+                title: prettyProjectName(repo.name),
+                description:
+                  summary ||
+                  repo.description ||
+                  fallbackProjectDescription(repo.language),
+                url: repo.html_url,
+                language: repo.language || "",
+                topics: Array.isArray(repo.topics)
+                  ? repo.topics.slice(0, 5)
+                  : [],
+                stars: repo.stargazers_count || 0,
+                updated: repo.pushed_at || repo.updated_at,
+                homepage: repo.homepage || "",
+              };
+            });
+          }),
+        );
+      });
+  }
+
+  function renderProjectStatus(message, linkText, linkUrl) {
+    if (!projectGrid) {
+      return;
+    }
+
+    projectGrid.innerHTML = "";
+
+    var status = document.createElement("p");
+
+    status.className = "proj-status";
+
+    status.setAttribute("role", "status");
+
+    status.appendChild(document.createTextNode(message));
+
+    if (linkText && linkUrl) {
+      var link = document.createElement("a");
+
+      link.href = linkUrl;
+
+      link.target = "_blank";
+
+      link.rel = "noopener noreferrer";
+
+      link.textContent = linkText;
+
+      status.appendChild(document.createTextNode(" "));
+
+      status.appendChild(link);
+    }
+
+    projectGrid.appendChild(status);
+
+    projectGrid.setAttribute("aria-busy", "false");
+  }
+
+  function createProjectCard(project) {
+    var card = document.createElement("div");
+
+    card.className = "proj-card";
+
+    var title = document.createElement("p");
+
+    title.className = "proj-title";
+
+    var titleLink = document.createElement("a");
+
+    titleLink.href = project.url;
+
+    titleLink.target = "_blank";
+
+    titleLink.rel = "noopener noreferrer";
+
+    titleLink.textContent = project.title;
+
+    var external = document.createElement("span");
+
+    external.className = "proj-external";
+
+    external.setAttribute("aria-hidden", "true");
+
+    external.textContent = " ↗";
+
+    titleLink.appendChild(external);
+
+    title.appendChild(titleLink);
+
+    card.appendChild(title);
+
+    var description = document.createElement("p");
+
+    description.className = "proj-desc";
+
+    description.textContent = project.description;
+
+    card.appendChild(description);
+
+    var tags = project.topics.length
+      ? project.topics
+      : project.language
+        ? [project.language]
+        : [];
+
+    if (tags.length) {
+      var stack = document.createElement("div");
+
+      stack.className = "proj-stack";
+
+      tags.forEach(function (tag) {
+        var item = document.createElement("span");
+
+        item.textContent = tag;
+
+        stack.appendChild(item);
+      });
+
+      card.appendChild(stack);
+    }
+
+    var meta = document.createElement("div");
+
+    meta.className = "proj-meta";
+
+    if (project.updated) {
+      var updated = document.createElement("span");
+
+      updated.textContent = "Updated " + formatProjectDate(project.updated);
+
+      meta.appendChild(updated);
+    }
+
+    if (project.stars > 0) {
+      var stars = document.createElement("span");
+
+      stars.textContent = "★ " + project.stars;
+
+      meta.appendChild(stars);
+    }
+
+    if (project.homepage && /^https?:\/\//i.test(project.homepage)) {
+      var liveLink = document.createElement("a");
+
+      liveLink.href = project.homepage;
+
+      liveLink.target = "_blank";
+
+      liveLink.rel = "noopener noreferrer";
+
+      liveLink.textContent = "Live site ↗";
+
+      meta.appendChild(liveLink);
+    }
+
+    if (meta.children.length) {
+      card.appendChild(meta);
+    }
+
+    return card;
+  }
+
+  function renderProjects(projects) {
+    if (!projectGrid) {
+      return;
+    }
+
+    projectGrid.innerHTML = "";
+
+    projectGrid.setAttribute("aria-busy", "false");
+
+    if (!projects.length) {
+      renderProjectStatus(
+        "No public repositories found yet.",
+        "View the GitHub profile ↗",
+        "https://github.com/" + PROJECT_GITHUB_USER,
+      );
+
+      return;
+    }
+
+    projects.forEach(function (project) {
+      projectGrid.appendChild(createProjectCard(project));
+    });
+  }
+
+  function loadLiveProjects() {
+    if (!projectGrid) {
+      return;
+    }
+
+    var cached = readProjectCache();
+
+    var hasCachedProjects = cached && cached.projects.length > 0;
+
+    var cacheIsFresh =
+      hasCachedProjects && Date.now() - cached.savedAt < PROJECT_CACHE_TTL;
+
+    if (hasCachedProjects) {
+      renderProjects(cached.projects);
+    }
+
+    if (cacheIsFresh) {
+      return;
+    }
+
+    if (!hasCachedProjects) {
+      projectGrid.innerHTML = "";
+
+      var loading = document.createElement("p");
+
+      loading.className = "proj-status";
+
+      loading.setAttribute("role", "status");
+
+      loading.textContent = "Loading repositories from GitHub…";
+
+      projectGrid.appendChild(loading);
+
+      projectGrid.setAttribute("aria-busy", "true");
+    }
+
+    fetchLiveProjects()
+      .then(function (projects) {
+        writeProjectCache(projects);
+
+        renderProjects(projects);
+      })
+      .catch(function () {
+        if (hasCachedProjects) {
+          return;
+        }
+
+        renderProjectStatus(
+          "Could not load GitHub repositories right now.",
+          "View them on GitHub ↗",
+          "https://github.com/" + PROJECT_GITHUB_USER,
+        );
+      });
+  }
+
+  loadLiveProjects();
+
+  /* =====================================================
      PROJECT CARD HOVER
      ===================================================== */
 
-  var projectCards = document.querySelectorAll(".proj-card");
+  if (projectGrid) {
+    projectGrid.addEventListener("mousemove", function (event) {
+      var target = event.target;
 
-  projectCards.forEach(function (card) {
-    card.addEventListener("mousemove", function (event) {
+      var card = target && target.closest ? target.closest(".proj-card") : null;
+
+      if (!card) {
+        return;
+      }
+
       var rect = card.getBoundingClientRect();
 
       var x = event.clientX - rect.left;
@@ -777,10 +1223,22 @@
         "deg)";
     });
 
-    card.addEventListener("mouseleave", function () {
+    projectGrid.addEventListener("mouseout", function (event) {
+      var target = event.target;
+
+      var card = target && target.closest ? target.closest(".proj-card") : null;
+
+      if (!card) {
+        return;
+      }
+
+      if (card.contains(event.relatedTarget)) {
+        return;
+      }
+
       card.style.transform = "";
     });
-  });
+  }
 
   /* =====================================================
      TERMINAL CURSOR EFFECT
