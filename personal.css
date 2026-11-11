@@ -1906,6 +1906,10 @@ header.nav {
   display: none;
 }
 
+.review-tabs[hidden] {
+  display: none;
+}
+
 .review-tab {
   position: relative;
 
@@ -1994,7 +1998,15 @@ header.nav {
   color: var(--ink);
 }
 
+.review-tab.tab-facebook i {
+  color: #1877f2;
+}
+
 .review-tab.tab-upwork i {
+  color: #14a800;
+}
+
+.review-tab.tab-instagram i {
   background: linear-gradient(
     45deg,
     #feda75 0%,
@@ -2376,6 +2388,15 @@ header.nav {
   background: linear-gradient(140deg, #5a98a7, #3b7280);
 }
 
+.review-avatar img {
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
 .review-meta {
   flex: 1 1 auto;
 
@@ -2444,6 +2465,32 @@ header.nav {
 
 .review-card[data-source="upwork"] .review-source i {
   color: #14a800;
+}
+
+.review-card[data-source="facebook"] .review-source i {
+  color: #1877f2;
+}
+
+.review-card[data-source="instagram"] .review-source i {
+  background: linear-gradient(
+    45deg,
+    #feda75 0%,
+    #fa7e1e 25%,
+    #d62976 50%,
+    #962fbf 75%,
+    #4f5bd5 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  color: #e4405f;
+
+  -webkit-text-fill-color: transparent;
+}
+
+.review-source i {
+  color: var(--ink-soft);
 }
 
 .review-rating-row {

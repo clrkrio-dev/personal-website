@@ -319,7 +319,50 @@
 
   var reviewNext = document.getElementById("reviewNext");
 
-  var reviewTabs = document.querySelectorAll(".review-tab");
+  var reviewTabs = document.getElementById("reviewTabs");
+
+  /* Set the API host to load reviews, e.g. "https://api.example.com" */
+
+  var REVIEW_API_BASE = "";
+
+  var REVIEW_API_PATH = "/api/public/projects";
+
+  var REVIEW_CACHE_KEY = "clrkrio-reviews-v1";
+
+  var REVIEW_CACHE_TTL = 60 * 60 * 1000;
+
+  var REVIEW_SOURCES = {
+    google: {
+      label: "Google",
+      icon: "fa-brands fa-google",
+      color: "#4285f4",
+    },
+    facebook: {
+      label: "Facebook",
+      icon: "fa-brands fa-facebook",
+      color: "#1877f2",
+    },
+    instagram: {
+      label: "Instagram",
+      icon: "fa-brands fa-instagram",
+      color: "#d62976",
+    },
+    linkedin: {
+      label: "LinkedIn",
+      icon: "fa-brands fa-linkedin-in",
+      color: "#0a66c2",
+    },
+    github: {
+      label: "GitHub",
+      icon: "fa-brands fa-github",
+      color: "",
+    },
+    upwork: {
+      label: "Upwork",
+      icon: "fa-brands fa-upwork",
+      color: "#14a800",
+    },
+  };
 
   var reviewScore = document.getElementById("reviewScore");
 
@@ -332,10 +375,6 @@
   var reviewEmpty = document.getElementById("reviewEmpty");
 
   if (reviewWrap && reviewTrack) {
-    var reviewCards = Array.prototype.slice.call(
-      reviewTrack.querySelectorAll(".review-card"),
-    );
-
     var reviewDotButtons = [];
 
     var reviewCurrent = 0;
@@ -344,10 +383,18 @@
 
     var reviewResizeTimeout;
 
+    /* Cards are replaced whenever the API responds */
+
+    function getReviewCards() {
+      return Array.prototype.slice.call(
+        reviewTrack.querySelectorAll(".review-card"),
+      );
+    }
+
     /* Visible cards only */
 
     function getVisibleReviews() {
-      return reviewCards.filter(function (card) {
+      return getReviewCards().filter(function (card) {
         return !card.hidden;
       });
     }
@@ -487,7 +534,7 @@
     /* Reset expanded quotes */
 
     function resetReviewText() {
-      reviewCards.forEach(function (card) {
+      getReviewCards().forEach(function (card) {
         var more = card.querySelector(".review-more");
 
         card.classList.remove("is-expanded");
@@ -502,20 +549,26 @@
 
     /* Expand / collapse each quote */
 
-    reviewCards.forEach(function (card) {
-      var more = card.querySelector(".review-more");
+    reviewTrack.addEventListener("click", function (event) {
+      var target = event.target;
+
+      var more = target && target.closest ? target.closest(".review-more") : null;
 
       if (!more) {
         return;
       }
 
-      more.addEventListener("click", function () {
-        var expanded = card.classList.toggle("is-expanded");
+      var card = more.closest(".review-card");
 
-        more.textContent = expanded ? "Show less" : "Read more";
+      if (!card) {
+        return;
+      }
 
-        more.setAttribute("aria-expanded", expanded ? "true" : "false");
-      });
+      var expanded = card.classList.toggle("is-expanded");
+
+      more.textContent = expanded ? "Show less" : "Read more";
+
+      more.setAttribute("aria-expanded", expanded ? "true" : "false");
     });
 
     /* Read a card's rating from its accessible label */
@@ -531,11 +584,11 @@
 
       var match = label.match(/Rated\s+([\d.]+)/i);
 
-      if (match) {
-        return parseFloat(match[1]);
+      if (!match) {
+        return null;
       }
 
-      var rating = parseFloat(stars.style.getPropertyValue("--rating"));
+      var rating = parseFloat(match[1]);
 
       return isNaN(rating) ? null : rating;
     }
@@ -600,19 +653,29 @@
 
     /* Filter tabs */
 
-    reviewTabs.forEach(function (tab) {
-      tab.addEventListener("click", function () {
+    if (reviewTabs) {
+      reviewTabs.addEventListener("click", function (event) {
+        var target = event.target;
+
+        var tab = target && target.closest ? target.closest(".review-tab") : null;
+
+        if (!tab) {
+          return;
+        }
+
         var filter = tab.getAttribute("data-filter");
 
-        reviewTabs.forEach(function (otherTab) {
-          var active = otherTab === tab;
+        Array.prototype.slice
+          .call(reviewTabs.querySelectorAll(".review-tab"))
+          .forEach(function (otherTab) {
+            var active = otherTab === tab;
 
-          otherTab.classList.toggle("active", active);
+            otherTab.classList.toggle("active", active);
 
-          otherTab.setAttribute("aria-pressed", active ? "true" : "false");
-        });
+            otherTab.setAttribute("aria-pressed", active ? "true" : "false");
+          });
 
-        reviewCards.forEach(function (card) {
+        getReviewCards().forEach(function (card) {
           var match =
             filter === "all" || card.getAttribute("data-source") === filter;
 
@@ -633,7 +696,7 @@
 
         setReviewActive(0);
       });
-    });
+    }
 
     /* Arrows */
 
@@ -699,6 +762,643 @@
       }, 120);
     });
 
+    /* ---------- API HELPERS ---------- */
+
+    function pickValue(item, keys) {
+      for (var index = 0; index < keys.length; index++) {
+        var value = item[keys[index]];
+
+        if (value !== undefined && value !== null && value !== "") {
+          return value;
+        }
+      }
+
+      return "";
+    }
+
+    function slugify(value) {
+      return String(value || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function titleCase(value) {
+      return String(value || "").replace(/\b\w/g, function (letter) {
+        return letter.toUpperCase();
+      });
+    }
+
+    function initialsFor(name) {
+      var parts = String(name || "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+
+      if (!parts.length) {
+        return "?";
+      }
+
+      if (parts.length === 1) {
+        return parts[0].slice(0, 2).toUpperCase();
+      }
+
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function normalizeRating(value) {
+      var rating = parseFloat(value);
+
+      if (isNaN(rating)) {
+        return null;
+      }
+
+      if (rating > 5 && rating <= 100) {
+        rating = rating / 20;
+      }
+
+      return Math.max(0, Math.min(5, rating));
+    }
+
+    function formatReviewDate(value) {
+      if (!value) {
+        return "";
+      }
+
+      var date = new Date(value);
+
+      if (isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    }
+
+    function sourceMeta(source) {
+      return (
+        REVIEW_SOURCES[source] || {
+          label: titleCase(source),
+          icon: "fa-solid fa-comment-dots",
+          color: "",
+        }
+      );
+    }
+
+    function normalizeReview(item) {
+      if (!item || typeof item !== "object") {
+        return null;
+      }
+
+      var sourceRaw = pickValue(item, [
+        "source",
+        "platform",
+        "site",
+        "provider",
+        "channel",
+        "origin",
+      ]);
+
+      var url = pickValue(item, [
+        "url",
+        "link",
+        "website",
+        "href",
+        "profileUrl",
+        "sourceUrl",
+        "permalink",
+      ]);
+
+      var avatar = pickValue(item, [
+        "avatar",
+        "avatarUrl",
+        "image",
+        "imageUrl",
+        "photo",
+        "picture",
+      ]);
+
+      var verified = pickValue(item, [
+        "verified",
+        "isVerified",
+        "verifiedPurchase",
+      ]);
+
+      return {
+        name: String(
+          pickValue(item, [
+            "name",
+            "author",
+            "reviewer",
+            "customer",
+            "client",
+            "user",
+            "displayName",
+            "fullName",
+            "title",
+          ]) || "Anonymous",
+        ),
+        role: String(
+          pickValue(item, [
+            "role",
+            "position",
+            "jobTitle",
+            "company",
+            "subtitle",
+            "context",
+            "relation",
+          ]) || "",
+        ),
+        text: String(
+          pickValue(item, [
+            "text",
+            "review",
+            "comment",
+            "content",
+            "body",
+            "message",
+            "description",
+            "summary",
+            "quote",
+          ]) || "",
+        ),
+        rating: normalizeRating(
+          pickValue(item, ["rating", "score", "stars", "rate", "ratingValue"]),
+        ),
+        source: slugify(sourceRaw) || "review",
+        date: formatReviewDate(
+          pickValue(item, [
+            "date",
+            "createdAt",
+            "created_at",
+            "publishedAt",
+            "published_at",
+            "submittedAt",
+            "updatedAt",
+            "time",
+          ]),
+        ),
+        url:
+          typeof url === "string" && /^https?:\/\//i.test(url) ? url : "",
+        avatar:
+          typeof avatar === "string" && /^https?:\/\//i.test(avatar)
+            ? avatar
+            : "",
+        verified: verified === true || verified === "true",
+      };
+    }
+
+    function averageScore(values) {
+      if (!values.length) {
+        return "-";
+      }
+
+      var average =
+        values.reduce(function (total, value) {
+          return total + value;
+        }, 0) / values.length;
+
+      return average.toFixed(1);
+    }
+
+    function createReviewCard(review, index) {
+      var card = document.createElement("article");
+
+      card.className = "review-card";
+
+      card.setAttribute("data-source", review.source);
+
+      var head = document.createElement("div");
+
+      head.className = "review-head";
+
+      var avatar = document.createElement("div");
+
+      avatar.className = "review-avatar tone-" + ((index % 6) + 1);
+
+      avatar.setAttribute("aria-hidden", "true");
+
+      if (review.avatar) {
+        var picture = document.createElement("img");
+
+        picture.src = review.avatar;
+
+        picture.alt = "";
+
+        picture.loading = "lazy";
+
+        avatar.appendChild(picture);
+      } else {
+        avatar.textContent = initialsFor(review.name);
+      }
+
+      head.appendChild(avatar);
+
+      var meta = document.createElement("div");
+
+      meta.className = "review-meta";
+
+      var name = document.createElement("p");
+
+      name.className = "review-name";
+
+      name.appendChild(document.createTextNode(review.name));
+
+      if (review.verified) {
+        var verifiedBadge = document.createElement("span");
+
+        verifiedBadge.className = "review-verified";
+
+        verifiedBadge.title = "Verified review";
+
+        var check = document.createElement("i");
+
+        check.className = "fa-solid fa-circle-check";
+
+        check.setAttribute("aria-hidden", "true");
+
+        verifiedBadge.appendChild(check);
+
+        var verifiedText = document.createElement("span");
+
+        verifiedText.className = "sr-only";
+
+        verifiedText.textContent = "Verified review";
+
+        verifiedBadge.appendChild(verifiedText);
+
+        name.appendChild(verifiedBadge);
+      }
+
+      meta.appendChild(name);
+
+      if (review.role) {
+        var role = document.createElement("p");
+
+        role.className = "review-role";
+
+        role.textContent = review.role;
+
+        meta.appendChild(role);
+      }
+
+      head.appendChild(meta);
+
+      var meta2 = sourceMeta(review.source);
+
+      var source = document.createElement("span");
+
+      source.className = "review-source";
+
+      source.title = meta2.label + " review";
+
+      var sourceIcon = document.createElement("i");
+
+      sourceIcon.className = meta2.icon;
+
+      sourceIcon.setAttribute("aria-hidden", "true");
+
+      if (meta2.color) {
+        sourceIcon.style.color = meta2.color;
+      }
+
+      source.appendChild(sourceIcon);
+
+      var sourceText = document.createElement("span");
+
+      sourceText.className = "sr-only";
+
+      sourceText.textContent = meta2.label + " review";
+
+      source.appendChild(sourceText);
+
+      head.appendChild(source);
+
+      card.appendChild(head);
+
+      var ratingRow = document.createElement("div");
+
+      ratingRow.className = "review-rating-row";
+
+      var stars = document.createElement("span");
+
+      stars.className = "rating-stars";
+
+      stars.style.setProperty(
+        "--rating",
+        review.rating === null ? 0 : review.rating,
+      );
+
+      stars.setAttribute("role", "img");
+
+      stars.setAttribute(
+        "aria-label",
+        review.rating === null
+          ? "Not rated"
+          : "Rated " + review.rating + " out of 5 stars",
+      );
+
+      stars.textContent = "★★★★★";
+
+      ratingRow.appendChild(stars);
+
+      if (review.date) {
+        var date = document.createElement("span");
+
+        date.className = "review-date";
+
+        date.textContent = review.date;
+
+        ratingRow.appendChild(date);
+      }
+
+      card.appendChild(ratingRow);
+
+      if (review.text) {
+        var text = document.createElement("p");
+
+        text.className = "review-text";
+
+        text.textContent = review.text;
+
+        card.appendChild(text);
+      }
+
+      var more = document.createElement("button");
+
+      more.type = "button";
+
+      more.className = "review-more";
+
+      more.setAttribute("aria-expanded", "false");
+
+      more.textContent = "Read more";
+
+      card.appendChild(more);
+
+      return card;
+    }
+
+    function buildReviewTabs(reviews) {
+      if (!reviewTabs) {
+        return;
+      }
+
+      var sources = [];
+
+      reviews.forEach(function (review) {
+        if (sources.indexOf(review.source) === -1) {
+          sources.push(review.source);
+        }
+      });
+
+      reviewTabs.innerHTML = "";
+
+      var allButton = document.createElement("button");
+
+      allButton.type = "button";
+
+      allButton.className = "review-tab active";
+
+      allButton.setAttribute("data-filter", "all");
+
+      allButton.setAttribute("aria-pressed", "true");
+
+      var allLabel = document.createElement("span");
+
+      allLabel.textContent = "All reviews";
+
+      allButton.appendChild(allLabel);
+
+      var allScore = document.createElement("span");
+
+      allScore.className = "tab-score";
+
+      allScore.textContent = averageScore(
+        reviews
+          .map(function (review) {
+            return review.rating;
+          })
+          .filter(function (rating) {
+            return rating !== null;
+          }),
+      );
+
+      allButton.appendChild(allScore);
+
+      reviewTabs.appendChild(allButton);
+
+      sources.forEach(function (source) {
+        var meta = sourceMeta(source);
+
+        var button = document.createElement("button");
+
+        button.type = "button";
+
+        button.className = "review-tab tab-" + source;
+
+        button.setAttribute("data-filter", source);
+
+        button.setAttribute("aria-pressed", "false");
+
+        var icon = document.createElement("i");
+
+        icon.className = meta.icon;
+
+        icon.setAttribute("aria-hidden", "true");
+
+        if (meta.color) {
+          icon.style.color = meta.color;
+        }
+
+        button.appendChild(icon);
+
+        var label = document.createElement("span");
+
+        label.textContent = meta.label;
+
+        button.appendChild(label);
+
+        var score = document.createElement("span");
+
+        score.className = "tab-score";
+
+        score.textContent = averageScore(
+          reviews
+            .filter(function (review) {
+              return review.source === source;
+            })
+            .map(function (review) {
+              return review.rating;
+            })
+            .filter(function (rating) {
+              return rating !== null;
+            }),
+        );
+
+        button.appendChild(score);
+
+        reviewTabs.appendChild(button);
+      });
+
+      reviewTabs.hidden = !reviews.length;
+    }
+
+    function renderReviews(reviews) {
+      getReviewCards().forEach(function (card) {
+        card.remove();
+      });
+
+      reviews.forEach(function (review, index) {
+        reviewTrack.appendChild(createReviewCard(review, index));
+      });
+
+      buildReviewTabs(reviews);
+
+      buildReviewDots();
+
+      refreshReviewText();
+
+      updateReviewSummary();
+
+      if (reviewEmpty) {
+        reviewEmpty.hidden = reviews.length > 0;
+      }
+    }
+
+    function setReviewEmptyMessage(message) {
+      if (!reviewEmpty) {
+        return;
+      }
+
+      var text = reviewEmpty.querySelector("p");
+
+      if (text) {
+        text.textContent = message;
+      }
+    }
+
+    function readReviewCache() {
+      try {
+        var stored = localStorage.getItem(REVIEW_CACHE_KEY);
+
+        if (!stored) {
+          return null;
+        }
+
+        var parsed = JSON.parse(stored);
+
+        if (
+          !parsed ||
+          !Array.isArray(parsed.reviews) ||
+          typeof parsed.savedAt !== "number"
+        ) {
+          return null;
+        }
+
+        return parsed;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function writeReviewCache(reviews) {
+      try {
+        localStorage.setItem(
+          REVIEW_CACHE_KEY,
+          JSON.stringify({
+            savedAt: Date.now(),
+            reviews: reviews,
+          }),
+        );
+      } catch (error) {
+        /* Storage can be unavailable in private mode */
+      }
+    }
+
+    function extractReviewList(payload) {
+      if (Array.isArray(payload)) {
+        return payload;
+      }
+
+      if (!payload || typeof payload !== "object") {
+        return [];
+      }
+
+      var candidates = [
+        payload.data,
+        payload.results,
+        payload.reviews,
+        payload.projects,
+        payload.items,
+        payload.list,
+      ];
+
+      for (var index = 0; index < candidates.length; index++) {
+        if (Array.isArray(candidates[index])) {
+          return candidates[index];
+        }
+      }
+
+      return [];
+    }
+
+    function loadReviews() {
+      if (!REVIEW_API_BASE) {
+        return;
+      }
+
+      var cached = readReviewCache();
+
+      var hasCachedReviews = cached && cached.reviews.length > 0;
+
+      var cacheIsFresh =
+        hasCachedReviews &&
+        Date.now() - cached.savedAt < REVIEW_CACHE_TTL;
+
+      if (hasCachedReviews) {
+        renderReviews(cached.reviews);
+      }
+
+      if (cacheIsFresh) {
+        return;
+      }
+
+      fetch(REVIEW_API_BASE.replace(/\/+$/, "") + REVIEW_API_PATH, {
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Review API failed: " + response.status);
+          }
+
+          return response.json();
+        })
+        .then(function (payload) {
+          var reviews = extractReviewList(payload)
+            .map(normalizeReview)
+            .filter(function (review) {
+              return review && (review.text || review.rating !== null);
+            });
+
+          writeReviewCache(reviews);
+
+          renderReviews(reviews);
+        })
+        .catch(function () {
+          if (hasCachedReviews) {
+            return;
+          }
+
+          setReviewEmptyMessage("Could not load reviews right now.");
+        });
+    }
+
     /* Start */
 
     buildReviewDots();
@@ -706,6 +1406,8 @@
     refreshReviewText();
 
     updateReviewSummary();
+
+    loadReviews();
 
     window.addEventListener("load", function () {
       buildReviewDots();
