@@ -80,6 +80,8 @@
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
           </svg>
         </button>
+
+        <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
       </div>
     </header>
 
@@ -408,72 +410,264 @@
 
             <div class="cert-track-wrap" id="certWrap">
               <div class="cert-track" id="certTrack">
-                <div class="cert-slide">
-                  <div class="cert-bar">
-                    <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT Logo" />
-                    </div>
+                <!-- Drop certificate pictures in /certificates and update the src + pdf links below -->
 
-                    <span class="cert-bar-name"> DICT Certification </span>
+                <div class="cert-slide">
+                  <div class="cert-media">
+                    <img
+                      src="certificates/cyber-threats.png"
+                      alt="DICT Certification: From Circuit Boards to Cyber Threats"
+                      loading="lazy"
+                    />
                   </div>
 
-                  <p class="cert-title">
-                    From Circuit Boards to Cyber Threats: Awareness that Matters
-                  </p>
+                  <div class="cert-caption">
+                    <p class="cert-title">
+                      From Circuit Boards to Cyber Threats: Awareness that
+                      Matters
+                    </p>
 
-                  <p class="cert-holder">
-                    Presented to <b>John Clarke Ballega</b>
-                  </p>
+                    <p class="cert-holder">
+                      Presented to <b>John Clarke Ballega</b>
+                    </p>
 
-                  <p class="cert-meta">Held on June 2, 2025</p>
+                    <p class="cert-meta">Held on June 2, 2025</p>
 
-                  <span class="cert-status">valid</span>
+                    <div class="cert-caption-foot">
+                      <span class="cert-status">valid</span>
+
+                      <a
+                        class="cert-pdf"
+                        href="certificates/cyber-threats.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >pdf ↗</a
+                      >
+                    </div>
+                  </div>
                 </div>
 
                 <div class="cert-slide">
-                  <div class="cert-bar">
-                    <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT Logo" />
-                    </div>
-                    <span class="cert-bar-name"> DICT Certification </span>
+                  <div class="cert-media">
+                    <img
+                      src="certificates/pnpki-orientation.png"
+                      alt="DICT Certification: PNPKI Orientation"
+                      loading="lazy"
+                    />
                   </div>
-                  <p class="cert-title">
-                    Philippine National Public Key Infrastructure (PNPKI)
-                    Orientation
-                  </p>
-                  <p class="cert-holder">
-                    Presented to <b>John Clarke Ballega</b>
-                  </p>
-                  <p class="cert-meta">Held on June 2, 2025</p>
-                  <span class="cert-status">valid</span>
+
+                  <div class="cert-caption">
+                    <p class="cert-title">
+                      Philippine National Public Key Infrastructure (PNPKI)
+                      Orientation
+                    </p>
+
+                    <p class="cert-holder">
+                      Presented to <b>John Clarke Ballega</b>
+                    </p>
+
+                    <p class="cert-meta">Held on June 2, 2025</p>
+
+                    <div class="cert-caption-foot">
+                      <span class="cert-status">valid</span>
+
+                      <a
+                        class="cert-pdf"
+                        href="certificates/pnpki-orientation.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >pdf ↗</a
+                      >
+                    </div>
+                  </div>
                 </div>
                 <div class="cert-slide">
-                  <div class="cert-bar">
-                    <div class="cert-seal">
-                      <img src="DICTLOGO.png" alt="DICT Logo" />
-                    </div>
-
-                    <span class="cert-bar-name"> DICT Certification </span>
+                  <div class="cert-media">
+                    <img
+                      src="certificates/egov-super-app.png"
+                      alt="DICT Certification: eGov PH Super App Orientation"
+                      loading="lazy"
+                    />
                   </div>
 
-                  <p class="cert-title">
-                    Digital Love for Every Juan: eGov PH Super App Orientation
-                    for Fullbright College ECT Department
-                  </p>
+                  <div class="cert-caption">
+                    <p class="cert-title">
+                      Digital Love for Every Juan: eGov PH Super App Orientation
+                      for Fullbright College ECT Department
+                    </p>
 
-                  <p class="cert-holder">
-                    Presented to <b>John Clarke Ballega</b>
-                  </p>
+                    <p class="cert-holder">
+                      Presented to <b>John Clarke Ballega</b>
+                    </p>
 
-                  <p class="cert-meta">Held on February 14, 2026</p>
+                    <p class="cert-meta">Held on February 14, 2026</p>
 
-                  <span class="cert-status">valid</span>
+                    <div class="cert-caption-foot">
+                      <span class="cert-status">valid</span>
+
+                      <a
+                        class="cert-pdf"
+                        href="certificates/egov-super-app.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >pdf ↗</a
+                      >
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div class="cert-controls">
               <div class="cert-dots" id="certDots"></div>
+            </div>
+          </div>
+
+          <!-- DIGITAL BADGES -->
+          <!-- Drop badge images in /badges and update the src + pdf links below -->
+
+          <div class="badges">
+            <p class="badges-title">digital badges</p>
+
+            <div
+              class="dbadge-track-wrap"
+              id="dbadgeWrap"
+              role="region"
+              aria-label="Digital badges, scrollable"
+              tabindex="0"
+            >
+              <div class="dbadge-track" id="dbadgeTrack">
+                <div class="dbadge-card">
+                  <div class="dbadge-media">
+                    <img
+                      src="badges/capm.png"
+                      alt="Certified Association of Project Management badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="dbadge-name">
+                    Certified Association of Project Management
+                  </p>
+
+                  <p class="dbadge-issuer">Issuer: Project Management Institute</p>
+
+                  <p class="dbadge-provider">
+                    <span>provided by Credly</span>
+
+                    <a
+                      href="badges/capm.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >pdf ↗</a
+                    >
+                  </p>
+                </div>
+
+                <div class="dbadge-card">
+                  <div class="dbadge-media">
+                    <img
+                      src="badges/psm1.png"
+                      alt="Professional Scrum Master I badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="dbadge-name">Professional Scrum Master I</p>
+
+                  <p class="dbadge-issuer">Issuer: Scrum.org</p>
+
+                  <p class="dbadge-provider">
+                    <span>provided by Credly</span>
+
+                    <a
+                      href="badges/psm1.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >pdf ↗</a
+                    >
+                  </p>
+                </div>
+
+                <div class="dbadge-card">
+                  <div class="dbadge-media">
+                    <img
+                      src="badges/ethics.png"
+                      alt="Ethics in Technology badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="dbadge-name">Ethics in Technology</p>
+
+                  <p class="dbadge-issuer">Issuer: WGU</p>
+
+                  <p class="dbadge-provider">
+                    <span>provided by Credly</span>
+
+                    <a
+                      href="badges/ethics.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >pdf ↗</a
+                    >
+                  </p>
+                </div>
+
+                <div class="dbadge-card">
+                  <div class="dbadge-media">
+                    <img
+                      src="badges/safe6.png"
+                      alt="Certified SAFe 6 badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="dbadge-name">Certified SAFe 6 Practitioner</p>
+
+                  <p class="dbadge-issuer">Issuer: SAFe by Scaled Agile</p>
+
+                  <p class="dbadge-provider">
+                    <span>provided by Credly</span>
+
+                    <a
+                      href="badges/safe6.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >pdf ↗</a
+                    >
+                  </p>
+                </div>
+
+                <div class="dbadge-card">
+                  <div class="dbadge-media">
+                    <img
+                      src="badges/wgu-ai.png"
+                      alt="AI Optimization Developer Certificate badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="dbadge-name">AI Optimization Developer Certificate</p>
+
+                  <p class="dbadge-issuer">Issuer: WGU</p>
+
+                  <p class="dbadge-provider">
+                    <span>provided by Credly</span>
+
+                    <a
+                      href="badges/wgu-ai.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >pdf ↗</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="dbadge-progress" aria-hidden="true">
+              <span class="dbadge-progress-fill" id="dbadgeProgress"></span>
             </div>
           </div>
         </section>
@@ -734,6 +928,6 @@
       </div>
     </footer>
 
-    <script src="personal.js?v=2026-11-06-5"></script>
+    <script src="personal.js?v=2026-11-16-4"></script>
   </body>
 </html>

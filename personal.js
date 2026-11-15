@@ -142,6 +142,34 @@
   });
 
   /* =====================================================
+     MISSING IMAGE HANDLING
+     ===================================================== */
+
+  function flagMissingMedia(selector) {
+    Array.prototype.slice
+      .call(document.querySelectorAll(selector))
+      .forEach(function (media) {
+        var image = media.querySelector("img");
+
+        if (!image) {
+          return;
+        }
+
+        var markMissing = function () {
+          media.classList.add("is-missing");
+        };
+
+        if (image.complete && image.naturalWidth === 0) {
+          markMissing();
+
+          return;
+        }
+
+        image.addEventListener("error", markMissing);
+      });
+  }
+
+  /* =====================================================
      CERTIFICATE CAROUSEL
      ===================================================== */
 
@@ -156,11 +184,110 @@
   var certNext = document.getElementById("certNext");
 
   if (certWrap && certTrack) {
+    flagMissingMedia(".cert-media");
+
     var slides = Array.prototype.slice.call(certTrack.children);
 
     var current = 0;
 
     var dots = [];
+
+    var certGap = 22;
+
+    var certSlideWidth = 0;
+
+    var certPitch = 0;
+
+    var certSpacer = document.createElement("div");
+
+    certSpacer.className = "cert-track-spacer";
+
+    certTrack.appendChild(certSpacer);
+
+    /* Size the slides and add matching gutters so every certificate
+       can sit centered in the viewport */
+
+    function layoutCertificates() {
+      var columnWidth = certWrap.clientWidth;
+
+      if (!columnWidth) {
+        return;
+      }
+
+      var gap = parseFloat(
+        window.getComputedStyle(certTrack).columnGap,
+      );
+
+      certGap = isNaN(gap) ? 22 : gap;
+
+      certSlideWidth = Math.round(columnWidth * 0.64);
+
+      var gutter = Math.round((columnWidth - certSlideWidth) / 2);
+
+      slides.forEach(function (slide) {
+        slide.style.flex = "0 0 " + certSlideWidth + "px";
+      });
+
+      certTrack.style.paddingLeft = gutter + "px";
+
+      certTrack.style.paddingRight = gutter + "px";
+
+      certSpacer.style.flexBasis = "0px";
+
+      /* Measure the real spacing between two slides */
+
+      certPitch = 0;
+
+      if (slides.length > 1) {
+        var first = slides[0].getBoundingClientRect();
+
+        var second = slides[1].getBoundingClientRect();
+
+        certPitch = second.left - first.left;
+      }
+
+      if (!certPitch) {
+        return;
+      }
+
+      /* Add trailing room so the last certificate can reach the center */
+
+      var needed = Math.ceil(certPitch * (slides.length - 1));
+
+      var maxScroll = certWrap.scrollWidth - certWrap.clientWidth;
+
+      certSpacer.style.flexBasis = Math.max(0, needed - maxScroll) + "px";
+    }
+
+    /* Center a certificate inside the carousel */
+
+    function centerSlide(index, smooth) {
+      var target = index * certPitch;
+
+      if (smooth === false) {
+        certWrap.scrollLeft = target;
+
+        return;
+      }
+
+      var startAt = certWrap.scrollLeft;
+
+      certWrap.scrollTo({
+        left: target,
+        behavior: "smooth",
+      });
+
+      /* Some browsers skip the smooth animation (background tabs, reduced
+         motion), so make sure the certificate still ends up centered */
+
+      window.setTimeout(function () {
+        var moved = Math.abs(certWrap.scrollLeft - startAt);
+
+        if (moved < 2 && Math.abs(certWrap.scrollLeft - target) > 4) {
+          certWrap.scrollLeft = target;
+        }
+      }, 700);
+    }
 
     if (slides.length > 0) {
       /* Create dots */
@@ -214,11 +341,7 @@
       function goTo(index) {
         index = (index + slides.length) % slides.length;
 
-        slides[index].scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest",
-        });
+        centerSlide(index);
 
         setActive(index);
       }
@@ -301,8 +424,187 @@
 
       /* Start */
 
+      layoutCertificates();
+
+      certWrap.scrollLeft = 0;
+
       setActive(0);
+
+      /* Keep the centered certificate centered on resize */
+
+      window.addEventListener("resize", function () {
+        layoutCertificates();
+
+        centerSlide(current, false);
+      });
     }
+  }
+
+  /* =====================================================
+     DIGITAL BADGES
+     ===================================================== */
+
+  var badgeWrap = document.getElementById("dbadgeWrap");
+
+  var badgeTrack = document.getElementById("dbadgeTrack");
+
+  var badgeProgress = document.getElementById("dbadgeProgress");
+
+  var badgeScrollTimeout;
+
+  var badgeResizeTimeout;
+
+  if (badgeWrap && badgeTrack) {
+    /* Scroll progress indicator */
+
+    function updateBadgeProgress() {
+      if (!badgeProgress) {
+        return;
+      }
+
+      var maxScroll = badgeWrap.scrollWidth - badgeWrap.clientWidth;
+
+      if (maxScroll <= 0) {
+        badgeProgress.parentNode.style.opacity = "0";
+
+        return;
+      }
+
+      badgeProgress.parentNode.style.opacity = "1";
+
+      var ratio = badgeWrap.clientWidth / badgeWrap.scrollWidth;
+
+      var progress = badgeWrap.scrollLeft / maxScroll;
+
+      badgeProgress.style.width = ratio * 100 + "%";
+
+      badgeProgress.style.marginLeft =
+        progress * (100 - ratio * 100) + "%";
+    }
+
+    /* Drag to scroll */
+
+    var badgeDragging = false;
+
+    var badgeDragStart = 0;
+
+    var badgeDragScroll = 0;
+
+    var badgeMoved = false;
+
+    badgeWrap.addEventListener("pointerdown", function (event) {
+      if (event.pointerType === "touch") {
+        return;
+      }
+
+      badgeDragging = true;
+
+      badgeMoved = false;
+
+      badgeDragStart = event.clientX;
+
+      badgeDragScroll = badgeWrap.scrollLeft;
+
+      badgeWrap.classList.add("is-dragging");
+    });
+
+    window.addEventListener("pointermove", function (event) {
+      if (!badgeDragging) {
+        return;
+      }
+
+      var distance = event.clientX - badgeDragStart;
+
+      if (Math.abs(distance) > 4) {
+        badgeMoved = true;
+      }
+
+      badgeWrap.scrollLeft = badgeDragScroll - distance;
+    });
+
+    window.addEventListener("pointerup", function () {
+      if (!badgeDragging) {
+        return;
+      }
+
+      badgeDragging = false;
+
+      badgeWrap.classList.remove("is-dragging");
+    });
+
+    window.addEventListener("pointercancel", function () {
+      badgeDragging = false;
+
+      badgeWrap.classList.remove("is-dragging");
+    });
+
+    /* Ignore clicks that ended a drag */
+
+    badgeWrap.addEventListener("click", function (event) {
+      if (badgeMoved) {
+        event.preventDefault();
+
+        badgeMoved = false;
+      }
+    }, true);
+
+    badgeWrap.addEventListener("dragstart", function (event) {
+      event.preventDefault();
+    });
+
+    /* Keyboard scrolling */
+
+    badgeWrap.addEventListener("keydown", function (event) {
+      var step = 140;
+
+      if (event.key === "ArrowRight") {
+        badgeWrap.scrollBy({ left: step, behavior: "smooth" });
+
+        event.preventDefault();
+      }
+
+      if (event.key === "ArrowLeft") {
+        badgeWrap.scrollBy({ left: -step, behavior: "smooth" });
+
+        event.preventDefault();
+      }
+    });
+
+    badgeWrap.addEventListener(
+      "scroll",
+      function () {
+        window.clearTimeout(badgeScrollTimeout);
+
+        badgeScrollTimeout = window.setTimeout(updateBadgeProgress, 60);
+      },
+      {
+        passive: true,
+      },
+    );
+
+    window.addEventListener("resize", function () {
+      window.clearTimeout(badgeResizeTimeout);
+
+      badgeResizeTimeout = window.setTimeout(updateBadgeProgress, 120);
+    });
+
+    /* Keep the progress bar honest when the strip resizes */
+
+    if ("ResizeObserver" in window) {
+      var badgeResizeObserver = new ResizeObserver(function () {
+        updateBadgeProgress();
+      });
+
+      badgeResizeObserver.observe(badgeWrap);
+    }
+
+    /* Placeholder tile when a badge image is missing */
+
+    flagMissingMedia(".dbadge-media");
+
+    updateBadgeProgress();
+
+    window.addEventListener("load", updateBadgeProgress);
   }
 
   /* =====================================================
@@ -1958,33 +2260,107 @@
 
   var navLinks = document.querySelectorAll(".nav-links a[href^='#']");
 
-  var sections = document.querySelectorAll("section[id]");
+  var sections = document.querySelectorAll("section[id], footer[id]");
 
-  if (navLinks.length && sections.length && "IntersectionObserver" in window) {
-    var navObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) {
-            return;
-          }
+  var navInner = document.querySelector(".nav-inner");
 
-          var id = entry.target.id;
+  var navIndicator = document.getElementById("navIndicator");
 
-          navLinks.forEach(function (link) {
-            var href = link.getAttribute("href");
+  /* Slide the indicator under the active link */
 
-            link.classList.toggle("active", href === "#" + id);
-          });
-        });
+  function moveNavIndicator() {
+    if (!navIndicator || !navInner) {
+      return;
+    }
+
+    var active = document.querySelector(".nav-links a.active");
+
+    if (!active || !active.offsetWidth) {
+      navIndicator.style.opacity = "0";
+
+      navIndicator.style.width = "0px";
+
+      return;
+    }
+
+    var innerRect = navInner.getBoundingClientRect();
+
+    var linkRect = active.getBoundingClientRect();
+
+    navIndicator.style.opacity = "1";
+
+    navIndicator.style.width = linkRect.width + "px";
+
+    navIndicator.style.top =
+      linkRect.bottom - innerRect.top + 2 + "px";
+
+    navIndicator.style.transform =
+      "translateX(" + (linkRect.left - innerRect.left) + "px)";
+  }
+
+  if (navLinks.length && sections.length) {
+    var navSections = Array.prototype.slice.call(sections);
+
+    var navScrollTimeout = null;
+
+    /* Highlight the section the reader is on */
+
+    function updateActiveNav() {
+      var line = 140;
+
+      var currentId = "";
+
+      navSections.forEach(function (section) {
+        var rect = section.getBoundingClientRect();
+
+        if (rect.top <= line && rect.bottom > line) {
+          currentId = section.id;
+        }
+      });
+
+      /* The last block wins once the reader reaches the bottom */
+
+      var atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (atBottom && navSections.length) {
+        currentId = navSections[navSections.length - 1].id;
+      }
+
+      navLinks.forEach(function (link) {
+        link.classList.toggle(
+          "active",
+          link.getAttribute("href") === "#" + currentId,
+        );
+      });
+
+      moveNavIndicator();
+    }
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (navScrollTimeout) {
+          return;
+        }
+
+        navScrollTimeout = window.setTimeout(function () {
+          navScrollTimeout = null;
+
+          updateActiveNav();
+        }, 80);
       },
       {
-        threshold: 0.35,
+        passive: true,
       },
     );
 
-    sections.forEach(function (section) {
-      navObserver.observe(section);
-    });
+    window.addEventListener("resize", updateActiveNav);
+
+    window.addEventListener("load", updateActiveNav);
+
+    updateActiveNav();
   }
 
   /* =====================================================
@@ -2011,6 +2387,16 @@
     }
 
     event.preventDefault();
+
+    /* Move the indicator right away, the observer catches up after the scroll */
+
+    if (link.classList.contains("nav-links") || link.closest(".nav-links")) {
+      navLinks.forEach(function (navLink) {
+        navLink.classList.toggle("active", navLink === link);
+      });
+
+      moveNavIndicator();
+    }
 
     target.scrollIntoView({
       behavior: "smooth",
