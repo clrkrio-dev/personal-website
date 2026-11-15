@@ -444,138 +444,71 @@
      DIGITAL BADGES
      ===================================================== */
 
-  var badgeWrap = document.getElementById("dbadgeWrap");
+  var badgeWrap = document.getElementById("badgeWrap");
 
-  var badgeTrack = document.getElementById("dbadgeTrack");
+  var badgeTrack = document.getElementById("badgeTrack");
 
-  var badgeProgress = document.getElementById("dbadgeProgress");
+  var badgePrev = document.getElementById("badgePrev");
+
+  var badgeNext = document.getElementById("badgeNext");
 
   var badgeScrollTimeout;
 
   var badgeResizeTimeout;
 
   if (badgeWrap && badgeTrack) {
-    /* Scroll progress indicator */
+    var badgeCards = Array.prototype.slice.call(
+      badgeTrack.querySelectorAll(".badge-card"),
+    );
 
-    function updateBadgeProgress() {
-      if (!badgeProgress) {
-        return;
+    function badgeStep() {
+      var card = badgeCards[0];
+
+      if (!card) {
+        return 220;
       }
 
-      var maxScroll = badgeWrap.scrollWidth - badgeWrap.clientWidth;
-
-      if (maxScroll <= 0) {
-        badgeProgress.parentNode.style.opacity = "0";
-
-        return;
-      }
-
-      badgeProgress.parentNode.style.opacity = "1";
-
-      var ratio = badgeWrap.clientWidth / badgeWrap.scrollWidth;
-
-      var progress = badgeWrap.scrollLeft / maxScroll;
-
-      badgeProgress.style.width = ratio * 100 + "%";
-
-      badgeProgress.style.marginLeft =
-        progress * (100 - ratio * 100) + "%";
+      return card.getBoundingClientRect().width + 14;
     }
 
-    /* Drag to scroll */
+    function updateBadgeArrows() {
+      var maxScroll = badgeWrap.scrollWidth - badgeWrap.clientWidth;
 
-    var badgeDragging = false;
-
-    var badgeDragStart = 0;
-
-    var badgeDragScroll = 0;
-
-    var badgeMoved = false;
-
-    badgeWrap.addEventListener("pointerdown", function (event) {
-      if (event.pointerType === "touch") {
-        return;
+      if (badgePrev) {
+        badgePrev.disabled = badgeWrap.scrollLeft <= 8;
       }
 
-      badgeDragging = true;
-
-      badgeMoved = false;
-
-      badgeDragStart = event.clientX;
-
-      badgeDragScroll = badgeWrap.scrollLeft;
-
-      badgeWrap.classList.add("is-dragging");
-    });
-
-    window.addEventListener("pointermove", function (event) {
-      if (!badgeDragging) {
-        return;
+      if (badgeNext) {
+        badgeNext.disabled = badgeWrap.scrollLeft >= maxScroll - 8;
       }
+    }
 
-      var distance = event.clientX - badgeDragStart;
+    if (badgePrev) {
+      badgePrev.addEventListener("click", function () {
+        badgeWrap.scrollBy({
+          left: -badgeStep(),
+          behavior: "smooth",
+        });
 
-      if (Math.abs(distance) > 4) {
-        badgeMoved = true;
-      }
+        window.setTimeout(updateBadgeArrows, 400);
+      });
+    }
 
-      badgeWrap.scrollLeft = badgeDragScroll - distance;
-    });
+    if (badgeNext) {
+      badgeNext.addEventListener("click", function () {
+        badgeWrap.scrollBy({
+          left: badgeStep(),
+          behavior: "smooth",
+        });
 
-    window.addEventListener("pointerup", function () {
-      if (!badgeDragging) {
-        return;
-      }
-
-      badgeDragging = false;
-
-      badgeWrap.classList.remove("is-dragging");
-    });
-
-    window.addEventListener("pointercancel", function () {
-      badgeDragging = false;
-
-      badgeWrap.classList.remove("is-dragging");
-    });
-
-    /* Ignore clicks that ended a drag */
-
-    badgeWrap.addEventListener("click", function (event) {
-      if (badgeMoved) {
-        event.preventDefault();
-
-        badgeMoved = false;
-      }
-    }, true);
-
-    badgeWrap.addEventListener("dragstart", function (event) {
-      event.preventDefault();
-    });
-
-    /* Keyboard scrolling */
-
-    badgeWrap.addEventListener("keydown", function (event) {
-      var step = 140;
-
-      if (event.key === "ArrowRight") {
-        badgeWrap.scrollBy({ left: step, behavior: "smooth" });
-
-        event.preventDefault();
-      }
-
-      if (event.key === "ArrowLeft") {
-        badgeWrap.scrollBy({ left: -step, behavior: "smooth" });
-
-        event.preventDefault();
-      }
-    });
+        window.setTimeout(updateBadgeArrows, 400);
+      });
+    }
 
     badgeWrap.addEventListener(
       "scroll",
       function () {
-        window.clearTimeout(badgeScrollTimeout);
-
-        badgeScrollTimeout = window.setTimeout(updateBadgeProgress, 60);
+        updateBadgeArrows();
       },
       {
         passive: true,
@@ -585,26 +518,16 @@
     window.addEventListener("resize", function () {
       window.clearTimeout(badgeResizeTimeout);
 
-      badgeResizeTimeout = window.setTimeout(updateBadgeProgress, 120);
+      badgeResizeTimeout = window.setTimeout(updateBadgeArrows, 120);
     });
-
-    /* Keep the progress bar honest when the strip resizes */
-
-    if ("ResizeObserver" in window) {
-      var badgeResizeObserver = new ResizeObserver(function () {
-        updateBadgeProgress();
-      });
-
-      badgeResizeObserver.observe(badgeWrap);
-    }
 
     /* Placeholder tile when a badge image is missing */
 
-    flagMissingMedia(".dbadge-media");
+    flagMissingMedia(".badge-media");
 
-    updateBadgeProgress();
+    updateBadgeArrows();
 
-    window.addEventListener("load", updateBadgeProgress);
+    window.addEventListener("load", updateBadgeArrows);
   }
 
   /* =====================================================
