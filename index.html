@@ -6,6 +6,27 @@
 
     <title>John Clarke Ballega | Personal Website</title>
 
+    <script>
+      /* Apply the saved theme before the first paint */
+
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+
+          if (saved === "dark" || saved === "light") {
+            document.documentElement.setAttribute("data-theme", saved);
+          } else if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          ) {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
+        } catch (error) {
+          /* Storage can be unavailable in private mode */
+        }
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
@@ -487,36 +508,21 @@
           <div class="badges">
             <p class="badges-title">digital badges</p>
 
-            <div class="badge-track-wrap" id="badgeWrap">
-              <button
-                class="badge-arrow prev"
-                id="badgePrev"
-                aria-label="Scroll badges left"
-              >
-                ‹
-              </button>
-
-              <button
-                class="badge-arrow next"
-                id="badgeNext"
-                aria-label="Scroll badges right"
-              >
-                ›
-              </button>
+            <div
+              class="badge-track-wrap"
+              id="badgeWrap"
+              role="region"
+              aria-label="Digital badges, scrollable"
+              tabindex="0"
+            >
 
               <div class="badge-track" id="badgeTrack">
                 <div class="badge-card">
                   <div class="badge-media">
-                    <img
-                      src="/Badge 1.png"
-                      alt="Claude 101"
-                      loading="lazy"
-                    />
+                    <img src="/Badge 1.png" alt="Claude 101" loading="lazy" />
                   </div>
 
-                  <p class="badge-name">
-                    Claude 101
-                  </p>
+                  <p class="badge-name">Claude 101</p>
 
                   <p class="badge-issuer">Issuer: Anthropic</p>
 
@@ -542,7 +548,7 @@
                     />
                   </div>
 
-                  <p class="badge-name">Professional Scrum Master I</p>
+                  <p class="badge-name">Claude Code 101</p>
 
                   <p class="badge-issuer">Issuer: Anthropic</p>
 
@@ -551,7 +557,7 @@
 
                     <a
                       class="badge-provider-link"
-                      href="https://claude.com/academy"
+                      href="https://academy.claude.com/verify/10002722ddfec785c585322b38f6ed3c"
                       target="_blank"
                       rel="noopener noreferrer"
                       >Claude Academy ↗</a
@@ -562,22 +568,22 @@
                 <div class="badge-card">
                   <div class="badge-media">
                     <img
-                      src="badges/ethics.png"
+                      src="/Badge 3.png"
                       alt="Ethics in Technology badge"
                       loading="lazy"
                     />
                   </div>
 
-                  <p class="badge-name">Ethics in Technology</p>
+                  <p class="badge-name">Introduction to Claude Cowork</p>
 
-                  <p class="badge-issuer">Issuer: WGU</p>
+                  <p class="badge-issuer">Issuer: Anthropic</p>
 
                   <p class="badge-provider">
                     <span class="badge-provider-label">provided by</span>
 
                     <a
                       class="badge-provider-link"
-                      href="https://claude.com/academy"
+                      href="https://academy.claude.com/verify/7b4f9d55a0117909a401ac1400b36712"
                       target="_blank"
                       rel="noopener noreferrer"
                       >Claude Academy ↗</a
@@ -588,22 +594,22 @@
                 <div class="badge-card">
                   <div class="badge-media">
                     <img
-                      src="badges/safe6.png"
+                      src="/Badge 4.png"
                       alt="Certified SAFe 6 badge"
                       loading="lazy"
                     />
                   </div>
 
-                  <p class="badge-name">Certified SAFe 6 Practitioner</p>
+                  <p class="badge-name">Claude Code in Action</p>
 
-                  <p class="badge-issuer">Issuer: SAFe by Scaled Agile</p>
+                  <p class="badge-issuer">Issuer: Anthropic</p>
 
                   <p class="badge-provider">
                     <span class="badge-provider-label">provided by</span>
 
                     <a
                       class="badge-provider-link"
-                      href="https://claude.com/academy"
+                      href="https://academy.claude.com/verify/5bd06d4710c4511ea99517791ac05c9a"
                       target="_blank"
                       rel="noopener noreferrer"
                       >Claude Academy ↗</a
@@ -614,22 +620,52 @@
                 <div class="badge-card">
                   <div class="badge-media">
                     <img
-                      src="badges/wgu-ai.png"
+                      src="Badge 5.png"
                       alt="AI Optimization Developer Certificate badge"
                       loading="lazy"
                     />
                   </div>
 
-                  <p class="badge-name">AI Optimization Developer Certificate</p>
+                  <p class="badge-name">
+                    Building effective human-agent teams(Beta)
+                  </p>
 
-                  <p class="badge-issuer">Issuer: WGU</p>
+                  <p class="badge-issuer">Issuer: Anthropic</p>
 
                   <p class="badge-provider">
                     <span class="badge-provider-label">provided by</span>
 
                     <a
                       class="badge-provider-link"
-                      href="https://claude.com/academy"
+                      href="https://academy.claude.com/verify/97543123ecedc7ba067f53a936a4bdd5"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Claude Academy ↗</a
+                    >
+                  </p>
+                </div>
+
+                <div class="badge-card">
+                  <div class="badge-media">
+                    <img
+                      src="Badge 6.png"
+                      alt="AI Optimization Developer Certificate badge"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <p class="badge-name">
+                    Introduction to Model Context Protocol
+                  </p>
+
+                  <p class="badge-issuer">Issuer: Anthropic</p>
+
+                  <p class="badge-provider">
+                    <span class="badge-provider-label">provided by</span>
+
+                    <a
+                      class="badge-provider-link"
+                      href="https://academy.claude.com/verify/ebfffc3653b64dfdc2590257b6ed9583"
                       target="_blank"
                       rel="noopener noreferrer"
                       >Claude Academy ↗</a
@@ -897,6 +933,6 @@
       </div>
     </footer>
 
-    <script src="personal.js?v=2026-11-16-9"></script>
+    <script src="personal.js?v=2026-11-16-11"></script>
   </body>
 </html>

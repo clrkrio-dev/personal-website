@@ -2,6 +2,28 @@
   "use strict";
 
   /* =====================================================
+     STORAGE HELPERS
+     ===================================================== */
+
+  function readStored(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      /* Storage can be unavailable in private mode */
+
+      return null;
+    }
+  }
+
+  function writeStored(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      /* Storage can be unavailable in private mode */
+    }
+  }
+
+  /* =====================================================
      THEME
      ===================================================== */
 
@@ -9,7 +31,7 @@
   var themeToggle = document.getElementById("themeToggle");
 
   function getPreferredTheme() {
-    var savedTheme = localStorage.getItem("theme");
+    var savedTheme = readStored("theme");
 
     if (savedTheme === "dark" || savedTheme === "light") {
       return savedTheme;
@@ -32,7 +54,7 @@
       root.removeAttribute("data-theme");
     }
 
-    localStorage.setItem("theme", theme);
+    writeStored("theme", theme);
   }
 
   /* Apply saved theme immediately */
@@ -317,6 +339,8 @@
       function setActive(index) {
         current = index;
 
+        writeStored("clrkrio-cert-position", String(index));
+
         slides.forEach(function (slide, slideIndex) {
           var active = slideIndex === index;
 
@@ -426,9 +450,19 @@
 
       layoutCertificates();
 
-      certWrap.scrollLeft = 0;
+      /* Restore the certificate that was open last time */
 
-      setActive(0);
+      var savedPosition = parseInt(readStored("clrkrio-cert-position"), 10);
+
+      if (!isNaN(savedPosition) && savedPosition > 0 && savedPosition < slides.length) {
+        centerSlide(savedPosition, false);
+
+        setActive(savedPosition);
+      } else {
+        certWrap.scrollLeft = 0;
+
+        setActive(0);
+      }
 
       /* Keep the centered certificate centered on resize */
 
@@ -448,86 +482,150 @@
 
   var badgeTrack = document.getElementById("badgeTrack");
 
-  var badgePrev = document.getElementById("badgePrev");
-
-  var badgeNext = document.getElementById("badgeNext");
-
-  var badgeScrollTimeout;
-
-  var badgeResizeTimeout;
+  var BADGE_SCROLL_KEY = "clrkrio-badge-scroll";
 
   if (badgeWrap && badgeTrack) {
-    var badgeCards = Array.prototype.slice.call(
-      badgeTrack.querySelectorAll(".badge-card"),
-    );
+    /* Remember where the strip was left */
 
-    function badgeStep() {
-      var card = badgeCards[0];
+    var badgeScrollSaveTimeout = null;
 
-      if (!card) {
-        return 220;
-      }
-
-      return card.getBoundingClientRect().width + 14;
+    function saveBadgeScroll() {
+      writeStored(BADGE_SCROLL_KEY, String(Math.round(badgeWrap.scrollLeft)));
     }
 
-    function updateBadgeArrows() {
-      var maxScroll = badgeWrap.scrollWidth - badgeWrap.clientWidth;
+    function restoreBadgeScroll() {
+      var saved = parseFloat(readStored(BADGE_SCROLL_KEY));
 
-      if (badgePrev) {
-        badgePrev.disabled = badgeWrap.scrollLeft <= 8;
+      if (!saved) {
+        return;
       }
 
-      if (badgeNext) {
-        badgeNext.disabled = badgeWrap.scrollLeft >= maxScroll - 8;
-      }
-    }
-
-    if (badgePrev) {
-      badgePrev.addEventListener("click", function () {
-        badgeWrap.scrollBy({
-          left: -badgeStep(),
-          behavior: "smooth",
-        });
-
-        window.setTimeout(updateBadgeArrows, 400);
-      });
-    }
-
-    if (badgeNext) {
-      badgeNext.addEventListener("click", function () {
-        badgeWrap.scrollBy({
-          left: badgeStep(),
-          behavior: "smooth",
-        });
-
-        window.setTimeout(updateBadgeArrows, 400);
-      });
+      badgeWrap.scrollLeft = saved;
     }
 
     badgeWrap.addEventListener(
       "scroll",
       function () {
-        updateBadgeArrows();
+        if (badgeScrollSaveTimeout) {
+          return;
+        }
+
+        badgeScrollSaveTimeout = window.setTimeout(function () {
+          badgeScrollSaveTimeout = null;
+
+          saveBadgeScroll();
+        }, 200);
       },
       {
         passive: true,
       },
     );
 
-    window.addEventListener("resize", function () {
-      window.clearTimeout(badgeResizeTimeout);
+    window.addEventListener("load", restoreBadgeScroll);
 
-      badgeResizeTimeout = window.setTimeout(updateBadgeArrows, 120);
+    window.setTimeout(restoreBadgeScroll, 400);
+
+    /* Drag to scroll */
+
+    var badgeDragging = false;
+
+    var badgeDragStart = 0;
+
+    var badgeDragScroll = 0;
+
+    var badgeMoved = false;
+
+    badgeWrap.addEventListener("pointerdown", function (event) {
+      if (event.pointerType === "touch") {
+        return;
+      }
+
+      badgeDragging = true;
+
+      badgeMoved = false;
+
+      badgeDragStart = event.clientX;
+
+      badgeDragScroll = badgeWrap.scrollLeft;
+
+      badgeWrap.classList.add("is-dragging");
+    });
+
+    window.addEventListener("pointermove", function (event) {
+      if (!badgeDragging) {
+        return;
+      }
+
+      var distance = event.clientX - badgeDragStart;
+
+      if (Math.abs(distance) > 4) {
+        badgeMoved = true;
+      }
+
+      badgeWrap.scrollLeft = badgeDragScroll - distance;
+    });
+
+    window.addEventListener("pointerup", function () {
+      if (!badgeDragging) {
+        return;
+      }
+
+      badgeDragging = false;
+
+      badgeWrap.classList.remove("is-dragging");
+    });
+
+    window.addEventListener("pointercancel", function () {
+      badgeDragging = false;
+
+      badgeWrap.classList.remove("is-dragging");
+    });
+
+    /* Ignore clicks that ended a drag */
+
+    badgeWrap.addEventListener(
+      "click",
+      function (event) {
+        if (badgeMoved) {
+          event.preventDefault();
+
+          badgeMoved = false;
+        }
+      },
+      true,
+    );
+
+    badgeWrap.addEventListener("dragstart", function (event) {
+      event.preventDefault();
+    });
+
+    /* Keyboard scrolling */
+
+    badgeWrap.addEventListener("keydown", function (event) {
+      var step = 140;
+
+      if (event.key === "ArrowRight") {
+        badgeWrap.scrollBy({
+          left: step,
+          behavior: "smooth",
+        });
+
+        event.preventDefault();
+      }
+
+      if (event.key === "ArrowLeft") {
+        badgeWrap.scrollBy({
+          left: -step,
+          behavior: "smooth",
+        });
+
+        event.preventDefault();
+      }
     });
 
     /* Placeholder tile when a badge image is missing */
 
     flagMissingMedia(".badge-media");
-
-    updateBadgeArrows();
-
-    window.addEventListener("load", updateBadgeArrows);
   }
 
   /* =====================================================
