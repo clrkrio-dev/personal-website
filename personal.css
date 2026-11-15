@@ -1418,7 +1418,7 @@ header.nav {
 
   border-radius: 4px;
 
-  background: var(--paper);
+  background: transparent;
 }
 
 .cert-media img {
@@ -1632,7 +1632,7 @@ header.nav {
 
   padding: 14px;
 
-  background: #14161f;
+  background: transparent;
 }
 
 .badge-media img {
@@ -1649,7 +1649,7 @@ header.nav {
 .badge-media.is-missing::after {
   content: "add badge image";
 
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--ink-soft);
 
   font-family: var(--mono);
 
