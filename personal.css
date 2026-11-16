@@ -429,16 +429,20 @@ header.nav {
 
   padding: 18px 24px 18px 88px;
 
-  display: flex;
+  display: grid;
 
-  justify-content: space-between;
+  grid-template-columns: auto minmax(0, 1fr) auto;
 
   align-items: center;
 
-  gap: 20px;
+  gap: 16px;
 }
 
 .nav-mark {
+  grid-column: 1;
+
+  justify-self: start;
+
   font-family: "Fraunces", serif;
 
   font-weight: 600;
@@ -460,15 +464,13 @@ header.nav {
 /* ---------- NAV LINKS ---------- */
 
 .nav-links {
-  position: absolute;
+  grid-column: 2;
 
-  left: 50%;
-
-  transform: translateX(-50%);
+  justify-self: start;
 
   display: flex;
 
-  gap: 28px;
+  gap: 20px;
 
   list-style: none;
 
@@ -552,7 +554,7 @@ header.nav {
     top 0.2s ease;
 }
 
-.nav-links li:first-child a {
+.nav-links li:first-child {
   display: none;
 }
 
@@ -561,6 +563,10 @@ header.nav {
 ========================================================= */
 
 .theme-toggle {
+  grid-column: 3;
+
+  justify-self: end;
+
   width: 34px;
   height: 34px;
 
@@ -3209,6 +3215,10 @@ footer {
 ========================================================= */
 
 @media (max-width: 760px) {
+  .nav-links {
+    display: none;
+  }
+
   .shell {
     display: block;
 
